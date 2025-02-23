@@ -143,17 +143,6 @@ a {
     }
 }
 
-
-/* Pages */
-
-/* <h1> on pages other than home */
-
-.page-title {
-    text-align: center;
-    color: #815469;
-}
-
-
 /* Footer */
 
 .footer {
@@ -163,32 +152,4 @@ a {
     padding-right: 20px;
     padding-bottom: 30px;
     background: #16161b;
-}
-
-.social ul {
-    list-style: none;
-    padding: 0;
-}
-
-.social li {
-    margin-bottom: 8px;
-}
-
-.social a {
-    color: #FFFFFF;
-    text-decoration: none;
-    font-weight: normal;
-    font-size: 20px;
-}
-
-.social a:hover {
-    text-decoration: underline;
-}
-
-.external-link-icon {
-    width: 20px;
-    height: 20px;
-    vertical-align: -5%;
-    margin-left: 4px;
-    filter: invert(1) brightness(100%);
 }
