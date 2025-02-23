@@ -20,7 +20,7 @@ a {
 /* Header */
 
 .header {
-    background: linear-gradient(135deg, #1e2a73, #243493, #3142f6, #6a79e3, #3f57c0, #243493, #1e2a73);
+    background: linear-gradient(135deg, #3b0918, #5a0d24, #800020, #a32a3f, #800020, #5a0d24, #3b0918);
     background-size: 200% 200%;
     background-blend-mode: overlay;
     padding: 25px;
