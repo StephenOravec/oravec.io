@@ -57,7 +57,7 @@ a {
     box-sizing: border-box;
 }
 
-/* <h1> on Home page */
+/* <h1> on Home page -- not in use; title is h1 */
 
 .home-title {
     text-align: center;
