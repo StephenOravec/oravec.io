@@ -1,3 +1,3 @@
 # oravec.io
 
-Links to Stephen Oravec's profiles on Warpcast, Bluesky, and GitHub.
+Stephen Oravec is building bots.
