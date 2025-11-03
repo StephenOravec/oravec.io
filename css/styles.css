@@ -114,6 +114,89 @@ body {
     box-shadow: 0 1px 4px rgba(255, 255, 255, 0.1);
 }
 
+/* Chat Section */
+
+.chat-section {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background: #1f1f26;
+    border: 1px solid #333;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(255, 255, 255, 0.05);
+}
+
+.chat-section h2 {
+    text-align: center;
+    margin-top: 0;
+    color: #ffffff;
+}
+
+.chat-box {
+    height: 250px;
+    overflow-y: auto;
+    border: 1px solid #333;
+    padding: 0.75rem;
+    background: #0f0f14;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+}
+
+.message {
+    margin: 0.4rem 0;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    word-wrap: break-word;
+}
+
+.message.user {
+    text-align: right;
+    background-color: #2b2b33;
+    color: #91c4ff;
+}
+
+.message.bot {
+    text-align: left;
+    background-color: #23232a;
+    color: #ffafcc;
+}
+
+.message.error {
+    color: #ff4d4d;
+}
+
+#chat-form {
+    display: flex;
+    gap: 0.5rem;
+}
+
+#user-input {
+    flex: 1;
+    padding: 0.6rem;
+    border: 1px solid #333;
+    border-radius: 6px;
+    background-color: #0f0f14;
+    color: #fff;
+}
+
+#user-input:focus {
+    outline: none;
+    border-color: #800020;
+}
+
+button {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    background: #800020;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: "Lustria", serif;
+}
+
+button:hover {
+    background: #a32a3f;
+}
 
 /* Card media queries */
 
