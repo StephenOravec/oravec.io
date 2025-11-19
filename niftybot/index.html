@@ -18,18 +18,35 @@
 </head>
 <body>
     <header class="header">
-        <h2><a href="/">oravec.io</a></h2>
+    <h1><a href="/">oravec.io</a></h1>
+    <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+    </button>
+    <nav class="nav-menu">
+        <ul>
+            <li><a href="/">home</a></li>
+            <li><a href="/echobot">echo-bot</a></li>
+            <li><a href="/niftybot">nifty-bot</a></li>
+        </ul>
+    </nav>
     </header>
 
-<h1>Nifty-Bot</h1>
+    <main>
 
-<div id="chat-box"></div>
+        <h1>Nifty-Bot</h1>
 
-<div id="input-row">
-    <input type="text" id="user-input" placeholder="Talk to Nifty-Bot…" />
-    <button id="send-btn">Send</button>
-</div>
+        <div id="chat-box"></div>
 
+        <div id="input-row">
+            <input type="text" id="user-input" placeholder="Talk to Nifty-Bot…" />
+            <button id="send-btn">Send</button>
+        </div>
+
+    </main>
+
+<script src="/js/menu.js"></script>
 <script src="/js/niftybot.js"></script>
 </body>
 </html>
