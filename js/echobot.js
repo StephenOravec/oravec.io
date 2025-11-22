@@ -20,8 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
         chatBox.scrollTop = chatBox.scrollHeight;
 
         try {
-            // Send message to echo-bot
-            const response = await fetch("https://echo-bot-566869872467.us-east5.run.app", {
+            // Send message to echo-bot via proxy
+            const response = await fetch("https://echo-proxy-566869872467.us-east5.run.app/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ text })
