@@ -100,7 +100,7 @@ body {
 .hamburger-line {
     width: 25px;
     height: 3px;
-    background-color: #333;
+    background-color: #fff;
     transition: all 0.3s ease;
 }
 
@@ -167,11 +167,12 @@ body {
     gap: 20px;
     justify-content: center;
     padding: 20px;
+    margin-top: 10px;
 }
 
 /* Card Unique Styles */
 
-.warpcast-card {
+.farcaster-card {
     background-color: #462d8d;
 }
 
@@ -185,7 +186,7 @@ body {
 
 /* Card Shared Styles */
 
-.warpcast-card, .bluesky-card, .github-card {
+.farcaster-card, .bluesky-card, .github-card {
     color: white;
     padding: 20px;
     border-radius: 20px;
@@ -196,20 +197,21 @@ body {
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-.warpcast-card a, .bluesky-card a, .github-card a {
+.farcaster-card a, .bluesky-card a, .github-card a {
     color: white;
     text-decoration: none;
     display: block;
     padding: 0px;
 }
 
-.warpcast-card a:focus, .bluesky-card a:focus, .github-card a:focus {
-    outline: 2px solid #00f;
+.farcaster-card a:focus, .bluesky-card a:focus, .github-card a:focus {
+    outline: 2px solid #fff;
+    outline-offset: 4px;
 }
 
-.warpcast-card:hover, .bluesky-card:hover, .github-card:hover {
+.farcaster-card:hover, .bluesky-card:hover, .github-card:hover {
     transform: scale(1.03);
-    box-shadow: 0 1px 4px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 9px rgba(0, 0, 0, 0.2);
 }
 
 /* echo-bot */
