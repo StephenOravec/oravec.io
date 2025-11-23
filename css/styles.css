@@ -33,7 +33,13 @@ body {
     100% { background-position: 100% 100%; }
 }
 
-/* Title of website as it appears in header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    position: relative;
+}
 
 .header h1 {
     margin: 0;
@@ -50,17 +56,24 @@ body {
     color: #FFFFFF;
 }
 
-.h1 {
+/* Page Titles */
+
+.page-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    position: relative;
+}
+
+.page-title h1 {
     margin: 0;
     font-size: 34px;
 }
 
-/* <h1> on Home page -- not in use; title is h1 */
-
-.home-title {
-    text-align: center;
-    padding-top: 7px;
-    font-size: 26px;
+.page-title h2 {
+    margin: 0;
+    font-size: 34px;
 }
 
 
@@ -70,19 +83,6 @@ body {
     flex: 1;
     padding-left: 0px;
     box-sizing: border-box;
-}
-
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    position: relative;
-}
-
-.header h1 {
-    margin: 0;
 }
 
 /* Hamburger button */
@@ -223,7 +223,7 @@ body {
     gap: 10px;
 }
 
-.chat-section h2 {
+.chat-section h1 {
     margin-bottom: 10px;
     text-align: center;
     font-size: 34px;
@@ -306,6 +306,21 @@ body {
 
 /* nifty-bot */
 
+.nifty-chat-section {
+    max-width: 600px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nifty-chat-section h1 {
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 34px;
+    color: #ffffff;
+}
+
 #chat-box {
     border: 1px solid #fff;
     padding: 1rem;
@@ -336,27 +351,6 @@ button {
 
 /* Card media queries */
 
-@media (min-width: 821px) {
-    .warpcast-card, .bluesky-card, .github-card {
-        font-size: 24px;
-    }
-
-    .warpcast-card a, .bluesky-card a, .github-card a {
-        padding: 20px;
-    }
-
-    .home-title {
-        padding-top: 5px;
-        font-size: 40px;
-    }
-}
-
-@media (min-width: 1400px) {
-    .wrapper {
-        max-width: 1400px;
-        margin: 0 auto;
-    }
-}
 
 /* Footer */
 
