@@ -124,7 +124,7 @@ body {
     right: -100%;
     width: 250px;
     height: 100vh;
-    background-color: #000;
+    background-color: #0D0D0D;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
     transition: right 0.3s ease;
     z-index: 1000;
@@ -204,9 +204,13 @@ body {
     padding: 0px;
 }
 
-.farcaster-card a:focus, .bluesky-card a:focus, .github-card a:focus {
+.farcaster-card:focus-within, .bluesky-card:focus-within, .github-card:focus-within {
     outline: 2px solid #fff;
     outline-offset: 4px;
+}
+
+.farcaster-card a:focus, .bluesky-card a:focus, .github-card a:focus {
+    outline: none;
 }
 
 .farcaster-card:hover, .bluesky-card:hover, .github-card:hover {
@@ -220,6 +224,7 @@ body {
 .chat-section {
     max-width: 600px;
     margin: 20px auto;
+    padding: 0 5px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -311,6 +316,7 @@ body {
 .nifty-chat-section {
     max-width: 600px;
     margin: 20px auto;
+    padding: 0 5px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -325,6 +331,7 @@ body {
 
 #chat-box {
     border: 1px solid #fff;
+    border-radius: 5px;
     padding: 1rem;
     height: 350px;
     overflow-y: auto;
