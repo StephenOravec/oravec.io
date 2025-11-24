@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Stephen Oravec is building bots.">
+    <meta name="author" content="Stephen Oravec">
+    <title>oravec.io | nifty-bot-v2</title>
+    <meta property="og:title" content="oravec.io">
+    <meta property="og:description" content="Stephen Oravec is building bots.">
+    <meta property="og:image" content="https://oravec.io/images/og-image.jpg">
+    <meta property="og:url" content="https://oravec.io/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="oravec.io">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://nifty-proxy-566869872467.us-east5.run.app;">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header class="header">
+    <h2><a href="/">oravec.io</a></h2>
+    <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+    </button>
+    <nav class="nav-menu">
+        <ul>
+            <li><a href="/">home</a></li>
+            <li><a href="/echobot">echo-bot</a></li>
+            <li><a href="/niftybot">nifty-bot</a></li>
+        </ul>
+    </nav>
+    </header>
+
+    <main>
+
+        <!-- Chat interface -->
+        <section id="nifty-bot">
+            <h1>X_nifty-bot</h1>
+            <div id="chat-box" class="nifty-bot-chat-box"></div>
+                <!-- Messages will appear here -->
+            <div id="input-row" class="nifty-bot-chat-form">
+                <input type="text" id="user-input" class="nifty-bot-user-input" placeholder="Chat with nifty-bot…" />
+                <button id="send-btn">Send</button>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="/js/menu.js"></script>
+    <script src="/js/niftybotv2.js"></script>
+</body>
+</html>
