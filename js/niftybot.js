@@ -37,7 +37,7 @@ async function sendMessage() {
 
     try {
         const res = await fetch(
-            "https://nifty-proxy-566869872467.us-east5.run.app/chat",
+            "https://nifty-proxy-566869872467.us-east5.run.app/niftybot/chat",
 
             {
                 method: "POST",
