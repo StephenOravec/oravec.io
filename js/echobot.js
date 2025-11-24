@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             // Send message to echo-bot via proxy
-            const response = await fetch("https://echo-proxy-566869872467.us-east5.run.app/chat", {
+            const response = await fetch("https://echo-proxy-566869872467.us-east5.run.app/niftybot/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ text })
