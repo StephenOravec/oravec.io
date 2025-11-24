@@ -34,13 +34,14 @@
     </header>
 
     <main>
-   
-        <section class="nifty-chat-section">
-            <h1>nifty-bot</h1>
-            <div id="chat-box"></div>
 
-            <div id="input-row">
-                <input type="text" id="user-input" placeholder="Chat with nifty-bot…" />
+        <!-- Chat interface -->
+        <section id="nifty-bot">
+            <h1>nifty-bot</h1>
+            <div id="chat-box" class="nifty-bot-chat-box"></div>
+                <!-- Messages will appear here -->
+            <div id="input-row" class="nifty-bot-chat-form">
+                <input type="text" id="user-input" class="nifty-bot-user-input" placeholder="Chat with nifty-bot…" />
                 <button id="send-btn">Send</button>
             </div>
         </section>
