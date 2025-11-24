@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Display user message
         const userMessage = document.createElement("div");
-        userMessage.className = "user-message";
+        userMessage.className = "echo-bot-user-message";
         userMessage.textContent = text;
         chatBox.appendChild(userMessage);
 
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Display bot message
             const botMessage = document.createElement("div");
-            botMessage.className = "bot-message";
+            botMessage.className = "echo-bot-bot-message";
             botMessage.textContent = botReply;
             chatBox.appendChild(botMessage);
             chatBox.scrollTop = chatBox.scrollHeight;
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
             // Display error if bot is unreachable
             const errorMessage = document.createElement("div");
-            errorMessage.className = "bot-message";
+            errorMessage.className = "echo-bot-bot-message";
             errorMessage.textContent = "⚠️ Unable to reach echo-bot.";
             chatBox.appendChild(errorMessage);
             chatBox.scrollTop = chatBox.scrollHeight;

@@ -219,9 +219,9 @@ body {
 }
 
 /* echo-bot */
-
+/* HTML */
 /* Chat Section */
-.chat-section {
+#echo-bot {
     max-width: 600px;
     margin: 20px auto;
     padding: 0 5px;
@@ -230,7 +230,7 @@ body {
     gap: 10px;
 }
 
-.chat-section h1 {
+#echo-bot h1 {
     margin-bottom: 10px;
     text-align: center;
     font-size: 34px;
@@ -238,7 +238,7 @@ body {
 }
 
 /* Chat box */
-.chat-box {
+.echo-bot-chat-box {
     background-color: #1a1a1f;
     border: 2px solid #333;
     border-radius: 15px;
@@ -252,9 +252,10 @@ body {
     scroll-behavior: smooth;
 }
 
+/* JavaScript */
 /* Chat messages */
-.user-message,
-.bot-message {
+.echo-bot-user-message,
+.echo-bot-bot-message {
     padding: 10px 15px;
     border-radius: 15px;
     max-width: 80%;
@@ -262,26 +263,27 @@ body {
 }
 
 /* User message */
-.user-message {
+.echo-bot-user-message {
     background-color: #5a0d24;
     color: #fff;
     align-self: flex-end;
 }
 
 /* Bot message */
-.bot-message {
+.echo-bot-bot-message {
     background-color: #222222;
     color: #ffffff;
     align-self: flex-start;
 }
 
+/* HTML */
 /* Chat input form */
-#chat-form {
+.echo-bot-chat-form {
     display: flex;
     gap: 10px;
 }
 
-#chat-form input[type="text"] {
+.echo-bot-chat-form input[type="text"] {
     flex: 1;
     padding: 10px;
     border-radius: 10px;
@@ -291,11 +293,11 @@ body {
     font-size: 16px;
 }
 
-#chat-form input[type="text"]::placeholder {
+.echo-bot-chat-form input[type="text"]::placeholder {
     color: #aaa;
 }
 
-#chat-form button {
+.echo-bot-chat-form button {
     padding: 10px 20px;
     border-radius: 10px;
     border: none;
@@ -306,7 +308,7 @@ body {
     transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
-#chat-form button:hover {
+.echo-bot-chat-form button:hover {
     transform: scale(1.05);
     background-color: #5a3ab3;
 }
