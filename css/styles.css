@@ -358,9 +358,73 @@ button {
 .bot { color: #ff0; }
 
 
+/* nifty-bot-v2 */
+
+#nifty-bot-v2-section {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 0 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#nifty-bot-v2-section h1 {
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 34px;
+    color: #ffffff;
+}
+
+.nifty-bot-v2-message-display {
+    border: 1px solid #fff;
+    padding: 1rem;
+    border-radius: 10px;
+    background-color: #0D0D0D;
+    height: 350px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    white-space: pre-line;
+}
+
+.nifty-bot-v2-chat-form {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.nifty-bot-v2-chat-form input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #444;
+    background-color: #1a1a1f;
+    color: #fff;
+    font-size: 16px;
+}
+
+.nifty-bot-v2-chat-form input[type="text"]::placeholder {
+    color: #aaa;
+}
+
+.nifty-bot-v2-chat-form button {
+    padding: 10px 20px;
+    border-radius: 15px;
+    border: none;
+    background-color: #0F52BA;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.nifty-bot-v2-chat-form button:hover {
+    background-color: #1367E9;
+}
+
+.user { color: #0f0; }
+.bot { color: #ff0; }
+
 
 /* Card media queries */
-
 
 /* Footer */
 
