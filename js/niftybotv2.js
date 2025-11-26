@@ -33,7 +33,7 @@ function appendMessage({ display, css, text }) {
 // ---------------------------
 // Main
 // ---------------------------
-async function sendMessage() {
+const sendMessage = async () => {
     const msg = userInput.value.trim();
     if (!msg) return;
 
@@ -46,15 +46,14 @@ async function sendMessage() {
     userInput.value = "";
 
     try {
-    const res = await fetch(PROXY_URL,{
+    const res = await fetch(PROXY_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 user_id: userId,
                 message: msg
             })
-        }
-    );
+        });
 
     const data = await res.json();
  
