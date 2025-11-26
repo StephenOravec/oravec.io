@@ -61,13 +61,13 @@ async function sendMessage() {
     appendMessage({
         display: "Bot",
         css: "niftyv2-agent",
-        text: data.response ?? "(No response received)"
+        text: data.response || "(No response received)"
     });
     
-    } catch (err) {
+    } catch {
         appendMessage({
-            display: "Bot",
-            css: "niftyv2-agent",
+            display: "System",
+            css: "niftyv2-system",
             text: "Error contacting server."
         });
     }

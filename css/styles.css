@@ -420,8 +420,9 @@ button {
     background-color: #1367E9;
 }
 
-.user { color: #0f0; }
-.bot { color: #ff0; }
+.niftyv2-user { color: #0f0; }
+.niftyv2-agent { color: #ff0; }
+.niftyv2-system { color: #f00; }
 
 
 /* Card media queries */
