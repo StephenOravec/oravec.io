@@ -6,11 +6,7 @@ const PROXY_URL = "https://nifty-proxy-566869872467.us-east5.run.app/niftybotv2/
 // ---------------------------
 // State
 // ---------------------------
-let userId = localStorage.getItem("niftyv2_user_id");
-if (!userId) {
-    userId = crypto.randomUUID();
-    localStorage.setItem("niftyv2_user_id", userId);
-}
+let sessionId = null;
 
 // ---------------------------
 // DOM
@@ -38,31 +34,35 @@ const sendMessage = async () => {
     if (!msg) return;
 
     appendMessage({
-    display: "User",
-    css: "niftyv2-user",
-    text: msg
+        display: "User",
+        css: "niftyv2-user",
+        text: msg
     });
 
     userInput.value = "";
 
     try {
-    const res = await fetch(PROXY_URL, {
+        const res = await fetch(PROXY_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                user_id: userId,
+                session_id: sessionId,
                 message: msg
             })
         });
 
-    const data = await res.json();
- 
-    appendMessage({
-        display: "Bot",
-        css: "niftyv2-agent",
-        text: data.response || "(No response received)"
-    });
-    
+        const data = await res.json();
+
+        if (data.session_id && !sessionId) {
+            sessionId = data.session_id;
+        }
+
+        appendMessage({
+            display: "Bot",
+            css: "niftyv2-agent",
+            text: data.response || "(No response received)"
+        });
+
     } catch {
         appendMessage({
             display: "System",
