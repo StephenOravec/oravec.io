@@ -7,3 +7,5 @@ Stephen Oravec is building bots.
 
 [nifty-proxy](https://github.com/StephenOravec/nifty-proxy)
 * [nifty-bot](https://github.com/StephenOravec/nifty-bot)
+* [nifty-bot-v2](https://github.com/StephenOravec/nifty-bot-v2)
+* [nifty-bot-v3](https://github.com/StephenOravec/nifty-bot-v3)
