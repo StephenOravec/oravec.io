@@ -11,7 +11,7 @@ let sessionId = null;
 // ---------------------------
 // DOM
 // ---------------------------
-const messageDisplay = document.getElementById("message-display");
+const messageDisplay = document.getElementById("niftyv3-message-display");
 const userInput = document.getElementById("user-input");
 const sendButton = document.getElementById("send-button");
 
