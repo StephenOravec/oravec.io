@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Stephen Oravec is building bots.">
+    <meta name="author" content="Stephen Oravec">
+    <title>oravec.io | nifty-bot-v4</title>
+    <meta property="og:title" content="oravec.io">
+    <meta property="og:description" content="Stephen Oravec is building bots.">
+    <meta property="og:image" content="https://oravec.io/images/og-image.jpg">
+    <meta property="og:url" content="https://oravec.io/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="oravec.io">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://nifty-proxy-566869872467.us-east5.run.app;">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <h1><a href="/">oravec.io</a></h1>
+        <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        <nav class="nav-menu">
+            <ul>
+                <li><a href="/">home</a></li>
+                <li><a href="/echobot">echo-bot</a></li>
+                <li><a href="/niftybot">nifty-bot</a></li>
+                <li><a href="/niftybotv2">nifty-bot-v2</a></li>
+                <li><a href="/niftybotv3">nifty-bot-v3</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+
+        <!-- Chat interface -->
+        <section id="nifty-bot-v4-section">
+            <h1>nifty-bot-v4</h1>
+            <div id="niftyv4-message-display"></div>
+                <!-- Messages will appear here -->
+            <div id="niftyv4-input-row">
+                <input type="text" id="user-input" placeholder="Chat with nifty-bot-v4..." />
+                <button type="submit" id="send-button">Send</button>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="/js/menu.js"></script>
+    <script src="/js/niftybotv4.js"></script>
+</body>
+</html>
