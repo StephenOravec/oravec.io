@@ -490,7 +490,73 @@ button {
 .niftyv3-assistant { color: #ff0; }
 .niftyv3-system { color: #f00; }
 
-/* Card media queries */
+
+/* nifty-bot-v4 */
+
+#nifty-bot-v4-section {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 0 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#nifty-bot-v4-section h1 {
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 34px;
+    color: #ffffff;
+}
+
+#niftyv4-message-display {
+    border: 1px solid #fff;
+    padding: 1rem;
+    border-radius: 10px;
+    background-color: #0D0D0D;
+    height: 350px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    white-space: pre-line;
+}
+
+#niftyv4-input-row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+#niftyv4-input-row input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #444;
+    background-color: #1a1a1f;
+    color: #fff;
+    font-size: 16px;
+}
+
+#niftyv4-input-row input[type="text"]::placeholder {
+    color: #aaa;
+}
+
+#niftyv4-input-row button {
+    padding: 10px 20px;
+    border-radius: 15px;
+    border: none;
+    background-color: #0F9D58;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#niftyv4-input-row button:hover {
+    background-color: #13CC72;
+}
+
+.niftyv4-user { color: #0f0; }
+.niftyv4-assistant { color: #ff0; }
+.niftyv4-system { color: #f00; }
+
 
 /* Footer */
 
