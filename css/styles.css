@@ -558,6 +558,70 @@ button {
 .niftyv4-system { color: #f00; }
 
 
+/* nifty-bot-v4 typing indicator */
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    background-color: #1a1a1f;
+    border-radius: 15px;
+    margin: 5px 0;
+    max-width: 80%;
+}
+
+.typing-text {
+    color: #ff0;
+    font-style: italic;
+}
+
+.typing-dots {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.typing-dots span {
+    width: 8px;
+    height: 8px;
+    background-color: #ff0;
+    border-radius: 50%;
+    animation: bounce 1.4s infinite;
+}
+
+.typing-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+    0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.3;
+    }
+    30% {
+        transform: translateY(-8px);
+        opacity: 1;
+    }
+}
+
+/* Disabled input styling */
+#niftyv4-input-row input[type="text"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#niftyv4-input-row button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #666;
+}
+
+
 /* Footer */
 
 .footer {
