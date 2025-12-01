@@ -87,6 +87,19 @@ function addTypingIndicator(isColdStart = false) {
     return null;
 }
 
+function removeTypingIndicator(interval = null) {
+    // Clear the interval if it exists
+    if (interval) {
+        clearInterval(interval);
+    }
+    
+    // Remove the typing indicator element
+    const typing = document.getElementById("typing-indicator");
+    if (typing) {
+        typing.remove();
+    }
+}
+
 // ---------------------------
 // Main
 // ---------------------------
