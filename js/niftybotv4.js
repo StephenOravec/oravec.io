@@ -55,7 +55,8 @@ function addTypingIndicator(isColdStart = false) {
     typingDiv.id = "typing-indicator";
     typingDiv.className = "typing-indicator";
     typingDiv.innerHTML = `
-        <span class="typing-text">${randomMessage}</span>
+        <span class="typing-emoji">🐰</span>
+        <span class="typing-text">${randomMessage.replace('🐰 ', '')}</span>
         <span class="typing-dots">
             <span></span><span></span><span></span>
         </span>
@@ -72,7 +73,8 @@ function addTypingIndicator(isColdStart = false) {
             if (messageIndex < messages.length) {
                 const textSpan = typingDiv.querySelector('.typing-text');
                 if (textSpan) {
-                    textSpan.textContent = messages[messageIndex];
+                    // Remove emoji from message when updating
+                    textSpan.textContent = messages[messageIndex].replace('🐰 ', '');
                 }
             } else {
                 clearInterval(interval);
@@ -83,17 +85,6 @@ function addTypingIndicator(isColdStart = false) {
     }
     
     return null;
-}
-
-function removeTypingIndicator(interval = null) {
-    if (interval) {
-        clearInterval(interval);
-    }
-    
-    const typing = document.getElementById("typing-indicator");
-    if (typing) {
-        typing.remove();
-    }
 }
 
 // ---------------------------
