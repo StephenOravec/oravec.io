@@ -101,6 +101,18 @@ function removeTypingIndicator(interval = null) {
 }
 
 // ---------------------------
+// Detect user's timezone
+// ---------------------------
+function getUserTimezone() {
+    try {
+        return Intl.DateTimeFormat().resolvedOptions().timeZone;
+    } catch (error) {
+        console.warn("Could not detect timezone, defaulting to America/New_York");
+        return "America/New_York";
+    }
+}
+
+// ---------------------------
 // Main
 // ---------------------------
 const sendMessage = async () => {
@@ -129,12 +141,16 @@ const sendMessage = async () => {
     const interval = addTypingIndicator(isColdStart);
 
     try {
+        // Detect user's timezone
+        const userTimezone = getUserTimezone();
+
         const res = await fetch(PROXY_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 session_id: sessionId,
-                message: msg
+                message: msg,
+                timezone: userTimezone
             })
         });
 
