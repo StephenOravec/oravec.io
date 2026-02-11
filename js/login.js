@@ -7,7 +7,7 @@ export function renderLogin(container) {
       <div class="login-box">
         <h1>oravec.io</h1>
         <p>Sign in to access your dashboard</p>
-        <div id="g_id_signin"></div>
+        <button id="loginButton" class="btn-login">Sign in with Google</button>
         <p id="login-status"></p>
       </div>
     </div>
@@ -30,16 +30,10 @@ function setupGoogleSignIn() {
     callback: handleCredentialResponse
   });
 
-  google.accounts.id.renderButton(
-    document.getElementById('g_id_signin'),
-    {
-      theme: 'filled_black',
-      size: 'large',
-      text: 'signin_with',
-      shape: 'rectangular',
-      width: 280
-    }
-  );
+  // Use custom button
+  document.getElementById('loginButton').addEventListener('click', () => {
+    google.accounts.id.prompt();
+  });
 }
 
 async function handleCredentialResponse(response) {
