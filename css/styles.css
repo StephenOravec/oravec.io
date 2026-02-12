@@ -57,6 +57,10 @@ body {
 .login-box #g_id_signin {
   display: flex;
   justify-content: center;
+  max-width: 280px;
+  margin: 0 auto;
+  overflow: hidden;
+  height: 44px;
 }
 
 .btn-login {
