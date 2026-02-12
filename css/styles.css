@@ -61,6 +61,12 @@ body {
   margin: 0 auto;
   overflow: hidden;
   height: 44px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.login-box #g_id_signin.ready {
+  opacity: 1;
 }
 
 .btn-login {

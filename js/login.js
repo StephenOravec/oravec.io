@@ -40,6 +40,12 @@ function setupGoogleSignIn() {
       width: 280
     }
   );
+
+  // Show button after render completes
+  setTimeout(() => {
+    const btn = document.getElementById('g_id_signin');
+    if (btn) btn.classList.add('ready');
+  }, 200);
 }
 
 async function handleCredentialResponse(response) {
