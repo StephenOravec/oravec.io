@@ -7,7 +7,7 @@ export function renderLogin(container) {
       <div class="login-box">
         <h1>oravec.io</h1>
         <p>Sign in to access your dashboard</p>
-        <div id="g_id_signin"></div>
+        <div id="signin-placeholder"></div>
         <p id="login-status"></p>
       </div>
     </div>
@@ -30,8 +30,14 @@ function setupGoogleSignIn() {
     callback: handleCredentialResponse
   });
 
+  // Create container dynamically so Google can't auto-render into it
+  const container = document.getElementById('signin-placeholder');
+  const signinDiv = document.createElement('div');
+  signinDiv.id = 'g_id_signin';
+  container.appendChild(signinDiv);
+
   google.accounts.id.renderButton(
-    document.getElementById('g_id_signin'),
+    signinDiv,
     {
       theme: 'filled_black',
       size: 'large',
@@ -40,12 +46,6 @@ function setupGoogleSignIn() {
       width: 280
     }
   );
-
-  // Show button after render completes
-  setTimeout(() => {
-    const btn = document.getElementById('g_id_signin');
-    if (btn) btn.classList.add('ready');
-  }, 200);
 }
 
 async function handleCredentialResponse(response) {
