@@ -15,13 +15,12 @@ export function renderLogin(container) {
 }
 
 export function initLogin() {
-  // Wait for Google Identity Services to load
-  const checkGoogle = setInterval(() => {
-    if (window.google && window.google.accounts) {
-      clearInterval(checkGoogle);
-      setupGoogleSignIn();
-    }
-  }, 100);
+  const script = document.createElement('script');
+  script.src = 'https://accounts.google.com/gsi/client';
+  script.onload = () => {
+    setupGoogleSignIn();
+  };
+  document.head.appendChild(script);
 }
 
 function setupGoogleSignIn() {
