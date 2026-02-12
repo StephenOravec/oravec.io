@@ -54,6 +54,15 @@ body {
   margin-bottom: 2rem;
 }
 
+.login-box #signin-placeholder {
+  display: flex;
+  justify-content: center;
+  max-width: 280px;
+  margin: 0 auto;
+  overflow: hidden;
+  height: 44px;
+}
+
 .login-box #g_id_signin {
   display: flex;
   justify-content: center;
