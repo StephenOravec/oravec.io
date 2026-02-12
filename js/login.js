@@ -1,53 +1,44 @@
 import { CONFIG } from './config.js';
 import { navigate, setSession } from './app.js';
 
+let client;
+
 export function renderLogin(container) {
   container.innerHTML = `
     <div class="login-view">
       <div class="login-box">
         <h1>oravec.io</h1>
         <p>Sign in to access your dashboard</p>
-        <div id="signin-placeholder"></div>
+        <button id="loginButton" class="btn-login">Sign in with Google</button>
         <p id="login-status"></p>
       </div>
     </div>
   `;
+
+  document.getElementById('loginButton').addEventListener('click', () => {
+    if (client) {
+      client.requestCode();
+    }
+  });
 }
 
 export function initLogin() {
   const script = document.createElement('script');
   script.src = 'https://accounts.google.com/gsi/client';
   script.onload = () => {
-    setupGoogleSignIn();
+    client = google.accounts.oauth2.initCodeClient({
+      client_id: CONFIG.GOOGLE_CLIENT_ID,
+      scope: 'openid email profile',
+      ux_mode: 'popup',
+      callback: handleAuthResponse
+    });
   };
   document.head.appendChild(script);
 }
 
-function setupGoogleSignIn() {
-  google.accounts.id.initialize({
-    client_id: CONFIG.GOOGLE_CLIENT_ID,
-    callback: handleCredentialResponse
-  });
+async function handleAuthResponse(response) {
+  if (!response.code) return;
 
-  // Create container dynamically so Google can't auto-render into it
-  const container = document.getElementById('signin-placeholder');
-  const signinDiv = document.createElement('div');
-  signinDiv.id = 'g_id_signin';
-  container.appendChild(signinDiv);
-
-  google.accounts.id.renderButton(
-    signinDiv,
-    {
-      theme: 'filled_black',
-      size: 'large',
-      text: 'signin_with',
-      shape: 'rectangular',
-      width: 280
-    }
-  );
-}
-
-async function handleCredentialResponse(response) {
   const status = document.getElementById('login-status');
   status.textContent = 'Verifying...';
 
@@ -55,7 +46,7 @@ async function handleCredentialResponse(response) {
     const result = await fetch(`${CONFIG.PROXY_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ credential: response.credential })
+      body: JSON.stringify({ code: response.code })
     });
 
     if (!result.ok) {
