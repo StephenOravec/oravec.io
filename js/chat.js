@@ -188,7 +188,14 @@ function addMessage(role, text) {
   const id = `msg-${Date.now()}-${Math.random().toString(36).slice(2)}`;
   div.id = id;
   div.className = `message message-${role}`;
-  div.textContent = text;
+  
+  // Render markdown for agent messages
+  if (role === 'agent') {
+    div.innerHTML = marked.parse(text);
+  } else {
+    div.textContent = text;
+  }
+
   messages.appendChild(div);
   messages.scrollTop = messages.scrollHeight;
   return id;
