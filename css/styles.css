@@ -314,19 +314,49 @@ body {
   cursor: not-allowed;
 }
 
+.evaluate-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.evaluate-prompt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  opacity: 0.6;
+}
+
+.evaluate-result {
+  line-height: 1.6;
+}
+
+.evaluate-input {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-top: 1px solid #333;
+  align-items: center;
+}
+
+.evaluate-error {
+  color: #e57373;
+}
+
 /* Markdown styling in agent messages */
 .message-agent h2 {
   font-size: 1.2em;
   font-weight: bold;
   margin: 1em 0 0.5em 0;
-  color: #2c3e50;
+  color: #4c6e91;
 }
 
 .message-agent h3 {
   font-size: 1.1em;
   font-weight: bold;
   margin: 0.8em 0 0.4em 0;
-  color: #34495e;
+  color: #4c6e91;
 }
 
 .message-agent ul, .message-agent ol {
@@ -340,7 +370,7 @@ body {
 
 .message-agent strong {
   font-weight: bold;
-  color: #2c3e50;
+  color: #7994af;
 }
 
 .message-agent code {
