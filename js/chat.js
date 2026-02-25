@@ -8,21 +8,22 @@ export function renderChat(container, session, agent) {
   currentAgent = agent;
   currentSession = session;
 
-  // Check agent mode
-  const isEvaluateOnly = agent.mode === 'evaluate-only';
+  const mode = agent.mode || 'chat';
 
-  if (isEvaluateOnly) {
-    renderEvaluateOnly(container, agent);
+  if (mode === 'upload') {
+    renderUploadMode(container, agent);
   } else {
     renderChatMode(container, session, agent);
   }
 }
 
 // ----------------------
-// Evaluate-Only Mode
+// Upload Mode
 // ----------------------
-function renderEvaluateOnly(container, agent) {
-  const acceptedTypes = agent.features?.fileUpload?.acceptedTypes?.join(',') || 'application/pdf';
+function renderUploadMode(container, agent) {
+  const uploadConfig = agent.features?.fileUpload || {};
+  const acceptedTypes = uploadConfig.acceptedTypes?.join(',') || '*';
+  const buttonLabel = uploadConfig.buttonLabel || 'Upload';
 
   container.innerHTML = `
     <div class="chat-view">
@@ -30,15 +31,15 @@ function renderEvaluateOnly(container, agent) {
         <button class="btn-back" id="backBtn">&larr; Back</button>
         <h2>${agent.icon} ${agent.name}</h2>
       </div>
-      <div class="evaluate-container" id="evaluateContainer">
-        <div class="evaluate-prompt" id="evaluatePrompt">
-          <p>Upload PDF to evaluate.</p>
+      <div class="upload-container" id="uploadContainer">
+        <div class="upload-prompt" id="uploadPrompt">
+          <p>${agent.description || 'Upload a file to begin.'}</p>
         </div>
-        <div class="evaluate-result" id="evaluateResult" style="display:none;"></div>
+        <div class="upload-result" id="uploadResult" style="display:none;"></div>
       </div>
-      <div class="evaluate-input">
+      <div class="upload-input">
         <input type="file" id="fileInput" accept="${acceptedTypes}">
-        <button class="btn-send" id="evaluateBtn">Evaluate</button>
+        <button class="btn-send" id="uploadBtn">${buttonLabel}</button>
       </div>
     </div>
   `;
@@ -47,45 +48,45 @@ function renderEvaluateOnly(container, agent) {
     navigate('dashboard');
   });
 
-  document.getElementById('evaluateBtn').addEventListener('click', submitEvaluation);
+  document.getElementById('uploadBtn').addEventListener('click', submitUpload);
 }
 
-async function submitEvaluation() {
+async function submitUpload() {
   const fileInput = document.getElementById('fileInput');
   const file = fileInput.files[0];
 
-  if (!file) {
-    return;
-  }
+  if (!file) return;
+
+  const uploadConfig = currentAgent.features?.fileUpload || {};
 
   // Validate file type
-  const uploadConfig = currentAgent.features?.fileUpload;
-  if (uploadConfig?.acceptedTypes && uploadConfig.acceptedTypes.length > 0) {
+  if (uploadConfig.acceptedTypes && uploadConfig.acceptedTypes.length > 0) {
     if (!uploadConfig.acceptedTypes.includes(file.type)) {
-      const resultDiv = document.getElementById('evaluateResult');
+      const resultDiv = document.getElementById('uploadResult');
       resultDiv.style.display = 'block';
-      resultDiv.innerHTML = '<p class="evaluate-error">Please upload a PDF file.</p>';
+      resultDiv.innerHTML = '<p class="upload-error">Invalid file type.</p>';
       return;
     }
   }
 
   // Clear previous result
-  const prompt = document.getElementById('evaluatePrompt');
-  const resultDiv = document.getElementById('evaluateResult');
+  const prompt = document.getElementById('uploadPrompt');
+  const resultDiv = document.getElementById('uploadResult');
+  const messages = currentAgent.messages || {};
   prompt.style.display = 'none';
   resultDiv.style.display = 'block';
-  resultDiv.innerHTML = '<div class="message-thinking">Evaluating<span class="thinking-dots"></span></div>';
+  resultDiv.innerHTML = `<div class="message-thinking">${messages.loading || 'Processing'}<span class="thinking-dots"></span></div>`;
 
   // Disable controls
-  const evaluateBtn = document.getElementById('evaluateBtn');
+  const uploadBtn = document.getElementById('uploadBtn');
   fileInput.disabled = true;
-  evaluateBtn.disabled = true;
+  uploadBtn.disabled = true;
 
   try {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('agentId', currentAgent.id);
-    formData.append('endpoint', uploadConfig?.endpoint || 'evaluate');
+    formData.append('endpoint', uploadConfig.endpoint || 'upload');
 
     const response = await fetch(`${CONFIG.PROXY_URL}/api/upload`, {
       method: 'POST',
@@ -104,21 +105,47 @@ async function submitEvaluation() {
     }
 
     const data = await response.json();
-    resultDiv.innerHTML = marked.parse(data.response);
+
+    let html = '';
+
+// Display supplemental report if present
+    if (data.format_report) {
+      const reportLabel = uploadConfig.reportLabel || 'Report';
+      html += '<div class="upload-report"><h3>' + reportLabel + '</h3><pre>'
+            + data.format_report
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+            + '</pre></div>';
+    }
+
+    // Display main response
+    if (data.response) {
+      html += '<div class="upload-response">'
+            + marked.parse(data.response)
+            + '</div>';
+    }
+
+    if (!html) {
+      html = '<p>No response received.</p>';
+    }
+
+    resultDiv.innerHTML = html;
 
   } catch (error) {
-    resultDiv.innerHTML = '<p class="evaluate-error">Evaluation failed. Please try again.</p>';
-    console.error('Evaluation error:', error);
+    const messages = currentAgent.messages || {};
+    resultDiv.innerHTML = `<p class="upload-error">${messages.error || 'Processing failed. Please try again.'}</p>`;
+    console.error('Upload error:', error);
   }
 
-  // Re-enable controls and clear file input for next upload
+  // Re-enable controls
   fileInput.disabled = false;
-  evaluateBtn.disabled = false;
+  uploadBtn.disabled = false;
   fileInput.value = '';
 }
 
 // ----------------------
-// Chat Mode (existing behavior)
+// Chat Mode
 // ----------------------
 function renderChatMode(container, session, agent) {
   const fileUploadEnabled = agent.features?.fileUpload?.enabled || false;
@@ -226,7 +253,7 @@ async function handleFileUpload(event) {
 
   if (uploadConfig.acceptedTypes && uploadConfig.acceptedTypes.length > 0) {
     if (!uploadConfig.acceptedTypes.includes(file.type)) {
-      addMessage('system', `Please upload a valid file type: ${uploadConfig.acceptedTypes.join(', ')}`);
+      addMessage('system', 'Invalid file type.');
       return;
     }
   }
