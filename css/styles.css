@@ -61,6 +61,17 @@ body {
   cursor: pointer;
 }
 
+.btn-login-disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.login-error {
+  color: #e57373;
+  font-size: 1rem;
+  margin-top: 1.5rem;
+}
+
 @media (min-width: 480px) {
   .login-box {
     padding: 3rem;

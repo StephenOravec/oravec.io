@@ -57,7 +57,15 @@ async function handleAuthResponse(response) {
       body: JSON.stringify({ code: response.code })
     });
 
-    if (!result.ok) return;
+    if (!result.ok) {
+      const loginBtn = document.getElementById('loginButton');
+      loginBtn.classList.add('btn-login-disabled');
+      const error = document.createElement('p');
+      error.className = 'login-error';
+      error.textContent = 'Unauthorized';
+      loginBtn.after(error);
+      return;
+}
 
     const data = await result.json();
     setSession(data.session_token, data.user);
