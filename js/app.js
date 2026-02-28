@@ -1,5 +1,5 @@
 import { CONFIG } from './config.js';
-import { initLogin, renderLogin } from './login.js';
+import { renderLogin } from './login.js';
 import { renderDashboard } from './dashboard.js';
 import { renderChat } from './chat.js';
 
@@ -66,7 +66,6 @@ async function init() {
   }
 
   renderLogin(app);
-  initLogin();
 }
 
 init();
