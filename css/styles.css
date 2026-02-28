@@ -434,9 +434,10 @@ body {
 
 .upload-response {
   margin-top: 1rem;
-  font-size: 0.9rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 1rem;
   line-height: 1.5;
-  color: #e0e0e0;
+  color: #ffffff;
 }
 
 /* ========================================
