@@ -9,8 +9,7 @@ export function renderLogin(container) {
       <div class="login-box">
         <h1>oravec.io</h1>
         <p>Sign in to access your dashboard</p>
-        <img id="loginButton" class="btn-login-img" src="/img/web_dark_rd_SI@2x.png" alt="Sign in with Google">
-        <p id="login-status"></p>
+        <img id="loginButton" class="btn-login-img" src="/img/google-signin.png" alt="Sign in with Google">
       </div>
     </div>
   `;
@@ -21,12 +20,10 @@ export function renderLogin(container) {
     }
   });
 
-  // Re-initialize Google client so sign-in works after sign-out
   initLogin();
 }
 
 export function initLogin() {
-  // Skip if Google GSI script is already loaded
   if (window.google?.accounts?.oauth2) {
     client = google.accounts.oauth2.initCodeClient({
       client_id: CONFIG.GOOGLE_CLIENT_ID,
@@ -53,9 +50,6 @@ export function initLogin() {
 async function handleAuthResponse(response) {
   if (!response.code) return;
 
-  const status = document.getElementById('login-status');
-  status.textContent = 'Verifying...';
-
   try {
     const result = await fetch(`${CONFIG.PROXY_URL}/auth/login`, {
       method: 'POST',
@@ -63,18 +57,13 @@ async function handleAuthResponse(response) {
       body: JSON.stringify({ code: response.code })
     });
 
-    if (!result.ok) {
-      const error = await result.json();
-      status.textContent = error.detail || 'Unauthorized';
-      return;
-    }
+    if (!result.ok) return;
 
     const data = await result.json();
     setSession(data.session_token, data.user);
     navigate('dashboard');
 
   } catch (error) {
-    status.textContent = 'Connection error. Please try again.';
     console.error('Login error:', error);
   }
 }

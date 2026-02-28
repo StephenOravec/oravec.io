@@ -5,13 +5,11 @@ import { renderChat } from './chat.js';
 
 const app = document.getElementById('app');
 
-// Session state
 let session = {
   token: null,
   user: null
 };
 
-// Navigation
 export function navigate(view, data = {}) {
   switch (view) {
     case 'login':
@@ -39,7 +37,6 @@ export function setSession(token, user) {
   localStorage.setItem('session_token', token);
 }
 
-// On load, check for existing session
 async function init() {
   const savedToken = localStorage.getItem('session_token');
 

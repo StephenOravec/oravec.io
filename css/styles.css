@@ -42,7 +42,6 @@ body {
   border-radius: 8px;
   width: 100%;
   max-width: 400px;
-  position: relative;
 }
 
 .login-box h1 {
@@ -60,20 +59,6 @@ body {
   width: 200px;
   height: auto;
   cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.btn-login-img:hover {
-  opacity: 0.85;
-}
-
-#login-status {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -2rem;
-  color: #44e3ff;
-  font-size: 0.9rem;
 }
 
 @media (min-width: 480px) {
