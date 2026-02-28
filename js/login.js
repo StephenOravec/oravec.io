@@ -9,7 +9,7 @@ export function renderLogin(container) {
       <div class="login-box">
         <h1>oravec.io</h1>
         <p>Sign in to access your dashboard</p>
-        <button id="loginButton" class="btn-login">Sign in with Google</button>
+        <img id="loginButton" class="btn-login-img" src="/img/web_dark_rd_SI@2x.png" alt="Sign in with Google">
         <p id="login-status"></p>
       </div>
     </div>
@@ -20,9 +20,23 @@ export function renderLogin(container) {
       client.requestCode();
     }
   });
+
+  // Re-initialize Google client so sign-in works after sign-out
+  initLogin();
 }
 
 export function initLogin() {
+  // Skip if Google GSI script is already loaded
+  if (window.google?.accounts?.oauth2) {
+    client = google.accounts.oauth2.initCodeClient({
+      client_id: CONFIG.GOOGLE_CLIENT_ID,
+      scope: 'openid email profile',
+      ux_mode: 'popup',
+      callback: handleAuthResponse
+    });
+    return;
+  }
+
   const script = document.createElement('script');
   script.src = 'https://accounts.google.com/gsi/client';
   script.onload = () => {
