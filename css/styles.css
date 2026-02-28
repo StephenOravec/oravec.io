@@ -23,7 +23,7 @@ body {
 }
 
 /* ========================================
-   Login View
+   Login View (mobile-first)
    ======================================== */
 
 .login-view {
@@ -31,20 +31,21 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
+  padding: 1rem;
 }
 
 .login-box {
   text-align: center;
-  padding: 3rem;
+  padding: 2rem 1.5rem;
   background: #141414;
   border: 1px solid #2a2a2a;
   border-radius: 8px;
+  width: 100%;
   max-width: 400px;
-  width: 90%;
 }
 
 .login-box h1 {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   margin-bottom: 0.5rem;
   color: #ffffff;
 }
@@ -54,20 +55,15 @@ body {
   margin-bottom: 2rem;
 }
 
-.btn-login {
-  padding: 0.75rem 1.5rem;
-  background: #1a3a5c;
-  color: #e0e0e0;
-  border: 1px solid #2a2a2a;
-  border-radius: 4px;
+.btn-login-img {
+  width: 200px;
+  height: auto;
   cursor: pointer;
-  font-size: 1rem;
-  transition: background 0.2s;
-  width: 280px;
+  transition: opacity 0.2s;
 }
 
-.btn-login:hover {
-  background: #245080;
+.btn-login-img:hover {
+  opacity: 0.85;
 }
 
 #login-status {
@@ -77,44 +73,58 @@ body {
   min-height: 1.2rem;
 }
 
+@media (min-width: 480px) {
+  .login-box {
+    padding: 3rem;
+  }
+
+  .login-box h1 {
+    font-size: 1.8rem;
+  }
+
+  .btn-login-img {
+    width: 250px;
+  }
+}
+
 /* ========================================
-   Dashboard View
+   Dashboard View (mobile-first)
    ======================================== */
 
 .dashboard-view {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  padding: 2rem;
+  padding: 1rem;
 }
 
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid #2a2a2a;
 }
 
 .dashboard-header h1 {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   color: #ffffff;
 }
 
 .dashboard-header .user-info {
   color: #888;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
 }
 
 .btn-logout {
   background: transparent;
   color: #888;
   border: 1px solid #333;
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 0.8rem;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   transition: color 0.2s, border-color 0.2s;
 }
 
@@ -125,7 +135,7 @@ body {
 
 .agents-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: 1fr;
   gap: 1rem;
 }
 
@@ -133,7 +143,7 @@ body {
   background: #141414;
   border: 1px solid #2a2a2a;
   border-radius: 8px;
-  padding: 1.5rem;
+  padding: 1.25rem;
   cursor: pointer;
   transition: border-color 0.2s, background 0.2s;
 }
@@ -144,31 +154,67 @@ body {
 }
 
 .agent-card h3 {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #ffffff;
   margin-bottom: 0.5rem;
 }
 
 .agent-card p {
   color: #888;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   line-height: 1.4;
 }
 
-.no-agents {
-  color: #666;
-  text-align: center;
-  padding: 3rem;
-}
-
+.no-agents,
 .loading-agents {
   color: #666;
   text-align: center;
-  padding: 3rem;
+  padding: 2rem;
+}
+
+@media (min-width: 480px) {
+  .dashboard-view {
+    padding: 2rem;
+  }
+
+  .dashboard-header {
+    margin-bottom: 2rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .dashboard-header .user-info {
+    font-size: 0.85rem;
+  }
+
+  .btn-logout {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .agents-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  .agent-card {
+    padding: 1.5rem;
+  }
+
+  .agent-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .agent-card p {
+    font-size: 0.9rem;
+  }
 }
 
 /* ========================================
-   Chat View
+   Chat View (mobile-first)
    ======================================== */
 
 .chat-view {
@@ -180,8 +226,8 @@ body {
 .chat-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 2rem;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid #2a2a2a;
   background: #0a0a0a;
 }
@@ -203,24 +249,24 @@ body {
 }
 
 .chat-header h2 {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #ffffff;
 }
 
 .chat-messages {
   flex: 1;
   overflow-y: auto;
-  padding: 1.5rem 2rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
 .message {
-  max-width: 75%;
+  max-width: 90%;
   padding: 0.75rem 1rem;
   border-radius: 8px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   line-height: 1.5;
   word-wrap: break-word;
 }
@@ -268,19 +314,19 @@ body {
 .chat-input {
   display: flex;
   gap: 0.5rem;
-  padding: 1rem 2rem;
+  padding: 0.75rem 1rem;
   border-top: 1px solid #2a2a2a;
   background: #0a0a0a;
 }
 
 .chat-input input {
   flex: 1;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem;
   background: #141414;
   border: 1px solid #2a2a2a;
   border-radius: 4px;
   color: #e0e0e0;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   outline: none;
   transition: border-color 0.2s;
 }
@@ -294,13 +340,13 @@ body {
 }
 
 .btn-send {
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.25rem;
   background: #1a3a5c;
   color: #e0e0e0;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   transition: background 0.2s;
 }
 
@@ -314,8 +360,42 @@ body {
   cursor: not-allowed;
 }
 
+@media (min-width: 480px) {
+  .chat-header {
+    gap: 1rem;
+    padding: 1rem 2rem;
+  }
+
+  .chat-header h2 {
+    font-size: 1.1rem;
+  }
+
+  .chat-messages {
+    padding: 1.5rem 2rem;
+  }
+
+  .message {
+    max-width: 75%;
+    font-size: 0.95rem;
+  }
+
+  .chat-input {
+    padding: 1rem 2rem;
+  }
+
+  .chat-input input {
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .btn-send {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}
+
 /* ========================================
-   Upload Mode
+   Upload Mode (mobile-first)
    ======================================== */
 
 .upload-container {
@@ -339,7 +419,7 @@ body {
 .upload-input {
   display: flex;
   gap: 0.5rem;
-  padding: 1rem;
+  padding: 0.75rem 1rem;
   border-top: 1px solid #333;
   align-items: center;
 }
@@ -362,7 +442,7 @@ body {
 
 .upload-report pre {
   white-space: pre-wrap;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   line-height: 1.4;
   color: #b0b0b0;
 }
@@ -371,13 +451,19 @@ body {
   margin-top: 1rem;
 }
 
+@media (min-width: 480px) {
+  .upload-report pre {
+    font-size: 0.8rem;
+  }
+}
+
 /* ========================================
    Markdown Styling
    ======================================== */
 
 .message-agent h2,
 .upload-response h2 {
-  font-size: 1.2em;
+  font-size: 1.1em;
   font-weight: bold;
   margin: 1em 0 0.5em 0;
   color: #4c6e91;
@@ -385,7 +471,7 @@ body {
 
 .message-agent h3,
 .upload-response h3 {
-  font-size: 1.1em;
+  font-size: 1em;
   font-weight: bold;
   margin: 0.8em 0 0.4em 0;
   color: #4c6e91;
@@ -421,4 +507,20 @@ body {
   border: none;
   border-top: 1px solid #2a2a2a;
   margin: 1em 0;
+}
+
+/* ========================================
+   Media Queries
+   ======================================== */
+
+@media (min-width: 480px) {
+  .message-agent h2,
+  .upload-response h2 {
+    font-size: 1.2em;
+  }
+
+  .message-agent h3,
+  .upload-response h3 {
+    font-size: 1.1em;
+  }
 }
