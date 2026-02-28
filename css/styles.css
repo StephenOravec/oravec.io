@@ -42,6 +42,7 @@ body {
   border-radius: 8px;
   width: 100%;
   max-width: 400px;
+  position: relative;
 }
 
 .login-box h1 {
@@ -67,10 +68,12 @@ body {
 }
 
 #login-status {
-  margin-top: 1rem;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2rem;
   color: #44e3ff;
   font-size: 0.9rem;
-  min-height: 1.2rem;
 }
 
 @media (min-width: 480px) {
@@ -508,10 +511,6 @@ body {
   border-top: 1px solid #2a2a2a;
   margin: 1em 0;
 }
-
-/* ========================================
-   Media Queries
-   ======================================== */
 
 @media (min-width: 480px) {
   .message-agent h2,
