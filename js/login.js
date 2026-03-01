@@ -50,6 +50,13 @@ export function initLogin() {
 async function handleAuthResponse(response) {
   if (!response.code) return;
 
+  // Show verifying state
+  const loginBtn = document.getElementById('loginButton');
+  const status = document.createElement('p');
+  status.className = 'login-status';
+  status.textContent = 'Verifying...';
+  loginBtn.after(status);
+
   try {
     const result = await fetch(`${CONFIG.PROXY_URL}/auth/login`, {
       method: 'POST',
@@ -58,20 +65,20 @@ async function handleAuthResponse(response) {
     });
 
     if (!result.ok) {
-      const loginBtn = document.getElementById('loginButton');
       loginBtn.classList.add('btn-login-disabled');
-      const error = document.createElement('p');
-      error.className = 'login-error';
-      error.textContent = 'Unauthorized';
-      loginBtn.after(error);
+      status.className = 'login-error';
+      status.textContent = 'Unauthorized';
       return;
-}
+    }
 
     const data = await result.json();
     setSession(data.session_token, data.user);
     navigate('dashboard');
 
   } catch (error) {
+    loginBtn.classList.add('btn-login-disabled');
+    status.className = 'login-error';
+    status.textContent = 'Unauthorized';
     console.error('Login error:', error);
   }
 }
