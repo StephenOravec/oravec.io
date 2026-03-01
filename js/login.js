@@ -8,7 +8,7 @@ export function renderLogin(container) {
     <div class="login-view">
       <div class="login-box">
         <h1>oravec.io</h1>
-        <p>Sign in to access your dashboard</p>
+        <p>AI Agent Dashboard</p>
         <img id="loginButton" class="btn-login-img" src="/img/google-signin.png" alt="Sign in with Google">
       </div>
     </div>
