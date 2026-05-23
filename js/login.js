@@ -1,6 +1,7 @@
 import { CONFIG } from './config.js';
 import { navigate, setSession } from './app.js';
 
+/** @type {{ requestCode: () => void } | undefined} */
 let client;
 
 export function renderLogin(container) {
