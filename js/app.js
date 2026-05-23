@@ -5,6 +5,7 @@ import { renderChat } from './chat.js';
 
 const app = document.getElementById('app');
 
+/** @type {{ token: string | null, user: { email: string } | null }} */
 let session = {
   token: null,
   user: null
