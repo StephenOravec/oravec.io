@@ -27,10 +27,6 @@ export function navigate(view, data = {}) {
   }
 }
 
-export function getSession() {
-  return session;
-}
-
 export function setSession(token, user) {
   session.token = token;
   session.user = user;
