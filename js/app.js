@@ -10,6 +10,10 @@ let session = {
   user: null
 };
 
+/**
+ * @param {'login' | 'dashboard' | 'chat'} view
+ * @param {{ agent?: object }} [data]
+ */
 export function navigate(view, data = {}) {
   switch (view) {
     case 'login':
