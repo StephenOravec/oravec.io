@@ -31,6 +31,10 @@ export function navigate(view, data = {}) {
   }
 }
 
+/**
+ * @param {string} token
+ * @param {{ email: string }} user
+ */
 export function setSession(token, user) {
   session.token = token;
   session.user = user;
