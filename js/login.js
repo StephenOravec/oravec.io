@@ -73,7 +73,7 @@ async function handleAuthResponse(response) {
     }
 
     const data = await result.json();
-    setSession(data.session_token, data.user);
+    setSession(data.session_token);
     navigate('dashboard');
 
   } catch (error) {

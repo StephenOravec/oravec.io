@@ -5,10 +5,9 @@ import { renderChat } from './chat.js';
 
 const app = document.getElementById('app');
 
-/** @type {{ token: string | null, user: { email: string } | null }} */
+/** @type {{ token: string | null }} */
 let session = {
-  token: null,
-  user: null
+  token: null
 };
 
 /**
@@ -19,7 +18,6 @@ export function navigate(view, data = {}) {
   switch (view) {
     case 'login':
       session.token = null;
-      session.user = null;
       localStorage.removeItem('session_token');
       renderLogin(app);
       break;
@@ -34,11 +32,9 @@ export function navigate(view, data = {}) {
 
 /**
  * @param {string} token
- * @param {{ email: string }} user
  */
-export function setSession(token, user) {
+export function setSession(token) {
   session.token = token;
-  session.user = user;
   localStorage.setItem('session_token', token);
 }
 
@@ -56,7 +52,6 @@ async function init() {
       if (response.ok) {
         const data = await response.json();
         session.token = savedToken;
-        session.user = data.user;
         navigate('dashboard');
         return;
       }

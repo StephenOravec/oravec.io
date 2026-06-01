@@ -5,10 +5,7 @@ export async function renderDashboard(container, session) {
   container.innerHTML = `
     <div class="dashboard-view">
       <div class="dashboard-header">
-        <div>
-          <h1>Dashboard</h1>
-          <span class="user-info">${session.user.email}</span>
-        </div>
+        <h1>Dashboard</h1>
         <button class="btn-logout" id="logoutBtn">Logout</button>
       </div>
       <div class="agents-grid" id="agents-grid">
