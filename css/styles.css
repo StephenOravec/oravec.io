@@ -226,6 +226,13 @@ body {
   height: 100vh;
 }
 
+/* When sidebar is present (chat mode), switch to row layout */
+.chat-view:has(.chat-sidebar) {
+  flex-direction: row;
+}
+
+/* ---- Chat header (upload mode only now) ---- */
+
 .chat-header {
   display: flex;
   align-items: center;
@@ -256,6 +263,131 @@ body {
   color: #ffffff;
 }
 
+/* ---- Sidebar ---- */
+
+.chat-sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: #0a0a0a;
+  border-right: 1px solid #2a2a2a;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-agent-name {
+  font-size: 1rem;
+  color: #ffffff;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.sidebar-label {
+  font-size: 0.75rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sidebar-select {
+  width: 100%;
+  padding: 0.5rem;
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+  color: #e0e0e0;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s;
+  cursor: pointer;
+}
+
+.sidebar-select:focus {
+  border-color: #444;
+}
+
+.sidebar-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #e0e0e0;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.sidebar-toggle-label input[type="checkbox"] {
+  accent-color: #1a3a5c;
+}
+
+/* ---- Sidebar overlay (mobile backdrop) ---- */
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+}
+
+.sidebar-overlay.open {
+  display: block;
+}
+
+/* ---- Chat main area ---- */
+
+.chat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Mobile header with sidebar toggle — hidden on desktop */
+.chat-main-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #2a2a2a;
+  background: #0a0a0a;
+}
+
+.btn-sidebar-toggle {
+  background: transparent;
+  color: #888;
+  border: 1px solid #333;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.btn-sidebar-toggle:hover {
+  color: #fff;
+  border-color: #555;
+}
+
+.chat-main-agent-name {
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+/* ---- Messages ---- */
+
 .chat-messages {
   flex: 1;
   overflow-y: auto;
@@ -278,6 +410,7 @@ body {
   align-self: flex-end;
   background: #1a3a5c;
   color: #e0e0e0;
+  white-space: pre-wrap;
 }
 
 .message-agent {
@@ -301,6 +434,14 @@ body {
   font-style: italic;
 }
 
+.message-meta {
+  font-size: 0.7rem;
+  color: #555;
+  margin-top: 0.5rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 .thinking-dots::after {
   content: '';
   animation: dots 1.5s steps(4, end) infinite;
@@ -314,14 +455,44 @@ body {
   100% { content: ''; }
 }
 
+/* ---- Chat input ---- */
+
 .chat-input {
   display: flex;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
   border-top: 1px solid #2a2a2a;
   background: #0a0a0a;
+  align-items: flex-end;
 }
 
+.chat-input textarea {
+  flex: 1;
+  padding: 0.75rem;
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+  color: #e0e0e0;
+  font-size: 0.9rem;
+  font-family: inherit;
+  line-height: 1.5;
+  outline: none;
+  resize: none;
+  min-height: 42px;
+  max-height: 200px;
+  overflow-y: auto;
+  transition: border-color 0.2s;
+}
+
+.chat-input textarea:focus {
+  border-color: #444;
+}
+
+.chat-input textarea::placeholder {
+  color: #555;
+}
+
+/* Keep input styles for upload mode file inputs */
 .chat-input input {
   flex: 1;
   padding: 0.75rem;
@@ -351,6 +522,7 @@ body {
   cursor: pointer;
   font-size: 0.9rem;
   transition: background 0.2s;
+  align-self: flex-end;
 }
 
 .btn-send:hover {
@@ -363,14 +535,29 @@ body {
   cursor: not-allowed;
 }
 
-@media (min-width: 480px) {
-  .chat-header {
-    gap: 1rem;
-    padding: 1rem 2rem;
+/* ---- Chat view responsive ---- */
+
+/* Mobile: sidebar is overlay drawer */
+@media (max-width: 767px) {
+  .chat-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
   }
 
-  .chat-header h2 {
-    font-size: 1.1rem;
+  .chat-sidebar.open {
+    transform: translateX(0);
+  }
+}
+
+/* Desktop: sidebar always visible, mobile header hidden */
+@media (min-width: 768px) {
+  .chat-main-header {
+    display: none;
   }
 
   .chat-messages {
@@ -386,7 +573,7 @@ body {
     padding: 1rem 2rem;
   }
 
-  .chat-input input {
+  .chat-input textarea {
     padding: 0.75rem 1rem;
     font-size: 0.95rem;
   }
