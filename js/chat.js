@@ -1,4 +1,4 @@
-iimport { CONFIG } from './config.js';
+import { CONFIG } from './config.js';
 import { navigate } from './app.js';
 
 // ----------------------
