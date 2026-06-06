@@ -221,7 +221,7 @@ function renderChatMode(container, session, agent) {
 
         <div class="sidebar-section" id="thinkingSection">
           <label class="sidebar-toggle-label">
-            <input type="checkbox" id="thinkingToggle"> Thinking
+            <input type="checkbox" id="thinkingToggle"> Deep Reasoning
           </label>
         </div>
 
@@ -525,9 +525,9 @@ function addMessage(role, text, meta = null) {
       metaDiv.className = 'message-meta';
       const parts = [];
       if (meta.display_name) parts.push(meta.display_name);
-      if (meta.effort) parts.push(meta.effort);
-      if (meta.thinking) parts.push('thinking');
-      if (meta.fallback) parts.push('fallback');
+      if (meta.effort) parts.push(capitalize(meta.effort));
+      if (meta.thinking) parts.push('Deep Reasoning');
+      if (meta.fallback) parts.push('Fallback');
       if (parts.length) {
         metaDiv.textContent = parts.join(' · ');
         div.appendChild(metaDiv);
