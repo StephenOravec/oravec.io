@@ -348,7 +348,6 @@ function setupTextarea() {
       sendMessage();
     }
   });
-}
 
   textarea.addEventListener('input', () => {
     textarea.style.height = 'auto';
