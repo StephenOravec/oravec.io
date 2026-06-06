@@ -231,7 +231,7 @@ body {
   flex-direction: row;
 }
 
-/* ---- Chat header (upload mode only now) ---- */
+/* ---- Chat header (upload mode only) ---- */
 
 .chat-header {
   display: flex;
@@ -280,6 +280,7 @@ body {
 .sidebar-header {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
 }
 
 .sidebar-agent-name {
@@ -330,6 +331,42 @@ body {
 
 .sidebar-toggle-label input[type="checkbox"] {
   accent-color: #1a3a5c;
+}
+
+.btn-end-chat {
+  background: transparent;
+  color: #888;
+  border: 1px solid #333;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: color 0.2s, border-color 0.2s;
+  margin-top: auto;
+  text-align: center;
+}
+
+.btn-end-chat:hover {
+  color: #fff;
+  border-color: #555;
+}
+
+.btn-sidebar-close {
+  background: transparent;
+  color: #888;
+  border: 1px solid #333;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  transition: color 0.2s, border-color 0.2s;
+  display: none;
+}
+
+.btn-sidebar-close:hover {
+  color: #fff;
+  border-color: #555;
 }
 
 /* ---- Sidebar overlay (mobile backdrop) ---- */
@@ -459,15 +496,21 @@ body {
 
 .chat-input {
   display: flex;
+  flex-direction: column;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
   border-top: 1px solid #2a2a2a;
   background: #0a0a0a;
-  align-items: flex-end;
+}
+
+.chat-input-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }
 
 .chat-input textarea {
-  flex: 1;
+  width: 100%;
   padding: 0.75rem;
   background: #141414;
   border: 1px solid #2a2a2a;
@@ -480,7 +523,7 @@ body {
   resize: none;
   min-height: 42px;
   max-height: 200px;
-  overflow-y: auto;
+  overflow-y: hidden;
   transition: border-color 0.2s;
 }
 
@@ -492,7 +535,7 @@ body {
   color: #555;
 }
 
-/* Keep input styles for upload mode file inputs */
+/* Keep input styles for upload mode */
 .chat-input input {
   flex: 1;
   padding: 0.75rem;
@@ -514,15 +557,14 @@ body {
 }
 
 .btn-send {
-  padding: 0.75rem 1.25rem;
+  padding: 0.4rem 1.25rem;
   background: #1a3a5c;
   color: #e0e0e0;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   transition: background 0.2s;
-  align-self: flex-end;
 }
 
 .btn-send:hover {
@@ -552,6 +594,10 @@ body {
   .chat-sidebar.open {
     transform: translateX(0);
   }
+
+  .btn-sidebar-close {
+    display: block;
+  }
 }
 
 /* Desktop: sidebar always visible, mobile header hidden */
@@ -579,8 +625,8 @@ body {
   }
 
   .btn-send {
-    padding: 0.75rem 1.5rem;
-    font-size: 0.95rem;
+    padding: 0.4rem 1.5rem;
+    font-size: 0.9rem;
   }
 }
 

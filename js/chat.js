@@ -205,7 +205,7 @@ function renderChatMode(container, session, agent) {
 
       <aside class="chat-sidebar" id="chatSidebar">
         <div class="sidebar-header">
-          <button class="btn-back" id="backBtn">&larr; Back</button>
+          <button class="btn-sidebar-close" id="sidebarClose">&times;</button>
         </div>
         <h2 class="sidebar-agent-name">${agent.icon || ''} ${agent.name}</h2>
 
@@ -224,6 +224,8 @@ function renderChatMode(container, session, agent) {
             <input type="checkbox" id="thinkingToggle"> Thinking
           </label>
         </div>
+
+        <button class="btn-end-chat" id="backBtn">End Chat</button>
       </aside>
 
       <div class="chat-main">
@@ -233,19 +235,22 @@ function renderChatMode(container, session, agent) {
         </div>
         <div class="chat-messages" id="chatMessages"></div>
         <div class="chat-input">
-          ${uploadButtonHTML}
           <textarea id="messageInput" placeholder="Type a message..." rows="1"></textarea>
-          <button class="btn-send" id="sendBtn">Send</button>
+          <div class="chat-input-actions">
+            ${uploadButtonHTML}
+            <button class="btn-send" id="sendBtn">Send</button>
+          </div>
         </div>
       </div>
     </div>
   `;
 
-  // Back
+  // End chat (navigates to dashboard)
   document.getElementById('backBtn').addEventListener('click', () => navigate('dashboard'));
 
   // Sidebar toggle (mobile)
   document.getElementById('sidebarToggle').addEventListener('click', () => toggleSidebar(true));
+  document.getElementById('sidebarClose').addEventListener('click', () => toggleSidebar(false));
   document.getElementById('sidebarOverlay').addEventListener('click', () => toggleSidebar(false));
 
   // Model selector
@@ -263,6 +268,9 @@ function renderChatMode(container, session, agent) {
   document.getElementById('thinkingToggle').addEventListener('change', (e) => {
     thinkingEnabled = e.target.checked;
   });
+
+  // Send button
+  document.getElementById('sendBtn').addEventListener('click', sendMessage);
 
   // Textarea
   setupTextarea();
@@ -322,6 +330,25 @@ function toggleSidebar(open) {
 function setupTextarea() {
   const textarea = document.getElementById('messageInput');
   const maxHeight = 200;
+
+  textarea.addEventListener('input', () => {
+    textarea.style.height = 'auto';
+    textarea.style.overflow = 'hidden';
+    if (textarea.scrollHeight > maxHeight) {
+      textarea.style.height = maxHeight + 'px';
+      textarea.style.overflow = 'auto';
+    } else {
+      textarea.style.height = textarea.scrollHeight + 'px';
+    }
+  });
+
+  textarea.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+}
 
   textarea.addEventListener('input', () => {
     textarea.style.height = 'auto';
