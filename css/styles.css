@@ -438,9 +438,11 @@ body {
   max-width: 90%;
   padding: 0.75rem 1rem;
   border-radius: 8px;
-  font-size: 0.9rem;
-  line-height: 1.5;
+  font-size: 1rem;
+  line-height: 1.6;
   word-wrap: break-word;
+  overflow-wrap: break-word;
+  min-width: 0;
 }
 
 .message-user {
@@ -454,6 +456,25 @@ body {
   align-self: flex-start;
   background: #1e1e1e;
   color: #e0e0e0;
+}
+
+.message-agent p {
+  margin: 0.5em 0;
+}
+
+.message-agent p:first-child {
+  margin-top: 0;
+}
+
+.message-agent p:last-child {
+  margin-bottom: 0;
+}
+
+.message-agent pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-x: auto;
+  max-width: 100%;
 }
 
 .message-system {
@@ -612,7 +633,7 @@ body {
 
   .message {
     max-width: 75%;
-    font-size: 0.95rem;
+    font-size: 1.05rem;
   }
 
   .chat-input {
@@ -621,7 +642,7 @@ body {
 
   .chat-input textarea {
     padding: 0.75rem 1rem;
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   .btn-send {
