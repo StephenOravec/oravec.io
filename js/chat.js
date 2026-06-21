@@ -348,18 +348,6 @@ function setupTextarea() {
       sendMessage();
     }
   });
-
-  textarea.addEventListener('input', () => {
-    textarea.style.height = 'auto';
-    textarea.style.height = Math.min(textarea.scrollHeight, maxHeight) + 'px';
-  });
-
-  textarea.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  });
 }
 
 // ----------------------
