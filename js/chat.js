@@ -313,8 +313,8 @@ function updateModelControls() {
       effortSelect.value = previousEffort;
       selectedEffort = previousEffort;
     } else {
-      effortSelect.value = 'high';
-      selectedEffort = 'high';
+      effortSelect.value = 'low';
+      selectedEffort = 'low';
     }
   } else {
     effortSection.style.display = 'none';
