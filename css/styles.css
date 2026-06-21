@@ -552,7 +552,7 @@ body {
   line-height: 1.5;
   outline: none;
   resize: none;
-  min-height: 42px;
+  min-height: 50px;
   max-height: 200px;
   overflow-y: hidden;
   transition: border-color 0.2s;
