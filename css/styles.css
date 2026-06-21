@@ -1,6 +1,6 @@
 @font-face {
-  font-family: 'Space Grotesk';
-  src: url('../fonts/SpaceGrotesk-VariableFont_wght.ttf') format('truetype');
+  font-family: 'Vend Sans';
+  src: url('../fonts/VendSans-VariableFont_wght.ttf') format('truetype');
   font-weight: 300 700;
   font-display: swap;
 }
@@ -16,7 +16,7 @@
 }
 
 body {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Vend Sans', sans-serif;
   background: #131314;
   color: #e0e0e0;
   height: 100vh;
