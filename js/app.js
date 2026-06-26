@@ -3,7 +3,26 @@ import { renderLogin } from './login.js';
 import { renderDashboard } from './dashboard.js';
 import { renderChat } from './chat.js';
 
-const app = document.getElementById('app');
+/**
+ * @typedef {Object} Session
+ * @property {string} token
+ */
+
+/**
+ * @typedef {Object} Agent
+ * @property {string} id
+ * @property {string} name
+ * @property {string} [icon]
+ * @property {string} [description]
+ * @property {string} [mode]
+ * @property {Object} [features]
+ * @property {Object} [messages]
+ */
+
+const app = /** @type {HTMLElement} */ (document.getElementById('app'));
+if (!app) {
+  throw new Error('Missing #app element');
+}
 
 /** @type {{ token: string | null }} */
 let session = {
@@ -12,7 +31,8 @@ let session = {
 
 /**
  * @param {'login' | 'dashboard' | 'chat'} view
- * @param {{ agent?: object }} [data]
+ * @param {{ agent?: Agent }} [data]
+ * @returns {void}
  */
 export function navigate(view, data = {}) {
   switch (view) {
@@ -22,22 +42,32 @@ export function navigate(view, data = {}) {
       renderLogin(app);
       break;
     case 'dashboard':
-      renderDashboard(app, session);
+      if (!session.token) {
+        renderLogin(app);
+        return;
+      }
+      renderDashboard(app, /** @type {Session} */ (session));
       break;
     case 'chat':
-      renderChat(app, session, data.agent);
+      if (!session.token || !data?.agent) {
+        renderLogin(app);
+        return;
+      }
+      renderChat(app, /** @type {Session} */ (session), data.agent);
       break;
   }
 }
 
 /**
  * @param {string} token
+ * @returns {void}
  */
 export function setSession(token) {
   session.token = token;
   localStorage.setItem('session_token', token);
 }
 
+/** @returns {Promise<void>} */
 async function init() {
   const savedToken = localStorage.getItem('session_token');
 
@@ -50,7 +80,6 @@ async function init() {
       });
 
       if (response.ok) {
-        const data = await response.json();
         session.token = savedToken;
         navigate('dashboard');
         return;
