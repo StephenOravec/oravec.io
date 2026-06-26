@@ -1,6 +1,27 @@
 import { CONFIG } from './config.js';
 import { navigate } from './app.js';
 
+/**
+ * @typedef {Object} Session
+ * @property {string} token
+ */
+
+/**
+ * @typedef {Object} Agent
+ * @property {string} id
+ * @property {string} name
+ * @property {string} [icon]
+ * @property {string} [description]
+ * @property {string} [mode]
+ * @property {Object} [features]
+ * @property {Object} [messages]
+ */
+
+/**
+ * @param {HTMLElement} container
+ * @param {Session} session
+ * @returns {Promise<void>}
+ */
 export async function renderDashboard(container, session) {
   container.innerHTML = `
     <div class="dashboard-view">
@@ -14,15 +35,23 @@ export async function renderDashboard(container, session) {
     </div>
   `;
 
-  document.getElementById('logoutBtn').addEventListener('click', () => {
-    navigate('login');
-  });
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      navigate('login');
+    });
+  }
 
   await loadAgents(session);
 }
 
+/**
+ * @param {Session} session
+ * @returns {Promise<void>}
+ */
 async function loadAgents(session) {
   const grid = document.getElementById('agents-grid');
+  if (!grid) return;
 
   try {
     const response = await fetch(`${CONFIG.PROXY_URL}/api/agents`, {
@@ -39,6 +68,7 @@ async function loadAgents(session) {
       throw new Error(`HTTP ${response.status}`);
     }
 
+    /** @type {Agent[]} */
     const agents = await response.json();
 
     if (agents.length === 0) {
@@ -52,8 +82,8 @@ async function loadAgents(session) {
       const card = document.createElement('div');
       card.className = 'agent-card';
       card.innerHTML = `
-        <h3>${agent.icon} ${agent.name}</h3>
-        <p>${agent.description}</p>
+        <h3>${agent.icon || ''} ${agent.name}</h3>
+        <p>${agent.description || ''}</p>
       `;
       card.addEventListener('click', () => {
         navigate('chat', { agent });
