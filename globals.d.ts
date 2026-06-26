@@ -24,3 +24,7 @@ interface Window {
 }
 
 declare const google: Google;
+
+declare const marked: {
+  parse(text: string): string;
+};

@@ -3,5 +3,5 @@
     "checkJs": true,
     "strict": true
   },
-  "include": ["js/**/*.js", "google.d.ts"]
+  "include": ["js/**/*.js", "globals.d.ts"]
 }
