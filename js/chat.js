@@ -4,6 +4,15 @@ import { navigate } from './app.js';
 // ----------------------
 // Model config (mirrors bot's MODELS dict — moves to config later)
 // ----------------------
+
+/**
+ * @typedef {Object} ModelConfig
+ * @property {string} displayName
+ * @property {string[]|null} effortLevels
+ * @property {string} thinkingType
+ */
+
+/** @type {Record<string, ModelConfig>} */
 const MODELS = {
   "claude-haiku-4-5-20251001": {
     displayName: "Haiku 4.5",
@@ -32,20 +41,61 @@ const MODELS = {
   },
 };
 
+/** @type {string} */
 const DEFAULT_MODEL = "claude-haiku-4-5-20251001";
 
 // ----------------------
 // State
 // ----------------------
+
+/**
+ * @typedef {Object} Agent
+ * @property {string} id
+ * @property {string} name
+ * @property {string} [icon]
+ * @property {string} [description]
+ * @property {string} [mode]
+ * @property {Object} [features]
+ * @property {Object} [messages]
+ */
+
+/**
+ * @typedef {Object} Session
+ * @property {string} token
+ */
+
+/**
+ * @typedef {Object} MessageMeta
+ * @property {string|null} display_name
+ * @property {string|null} effort
+ * @property {boolean} thinking
+ * @property {boolean} fallback
+ */
+
+/** @type {Agent|null} */
 let currentAgent = null;
+
+/** @type {Session|null} */
 let currentSession = null;
+
+/** @type {string} */
 let selectedModel = DEFAULT_MODEL;
+
+/** @type {string|null} */
 let selectedEffort = null;
+
+/** @type {boolean} */
 let thinkingEnabled = false;
 
 // ----------------------
 // Entry point
 // ----------------------
+
+/**
+ * @param {HTMLElement} container
+ * @param {Session} session
+ * @param {Agent} agent
+ */
 export function renderChat(container, session, agent) {
   currentAgent = agent;
   currentSession = session;
@@ -62,6 +112,11 @@ export function renderChat(container, session, agent) {
 // ----------------------
 // Upload Mode (unchanged)
 // ----------------------
+
+/**
+ * @param {HTMLElement} container
+ * @param {Agent} agent
+ */
 function renderUploadMode(container, agent) {
   const uploadConfig = agent.features?.fileUpload || {};
   const acceptedTypes = uploadConfig.acceptedTypes?.join(',') || '*';
@@ -86,40 +141,58 @@ function renderUploadMode(container, agent) {
     </div>
   `;
 
-  document.getElementById('backBtn').addEventListener('click', () => {
-    navigate('dashboard');
-  });
+  const backBtn = document.getElementById('backBtn');
+  if (backBtn) {
+    backBtn.addEventListener('click', () => {
+      navigate('dashboard');
+    });
+  }
 
-  document.getElementById('uploadBtn').addEventListener('click', submitUpload);
+  const uploadBtn = document.getElementById('uploadBtn');
+  if (uploadBtn) {
+    uploadBtn.addEventListener('click', submitUpload);
+  }
 }
 
+/** @returns {Promise<void>} */
 async function submitUpload() {
-  const fileInput = document.getElementById('fileInput');
-  const file = fileInput.files[0];
+  const fileInput = /** @type {HTMLInputElement|null} */ (document.getElementById('fileInput'));
+  if (!fileInput) return;
 
+  const file = fileInput.files?.[0];
   if (!file) return;
+  if (!currentAgent || !currentSession) return;
 
   const uploadConfig = currentAgent.features?.fileUpload || {};
 
   if (uploadConfig.acceptedTypes && uploadConfig.acceptedTypes.length > 0) {
     if (!uploadConfig.acceptedTypes.includes(file.type)) {
       const resultDiv = document.getElementById('uploadResult');
-      resultDiv.style.display = 'block';
-      resultDiv.innerHTML = '<p class="upload-error">Invalid file type.</p>';
+      if (resultDiv) {
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = '<p class="upload-error">Invalid file type.</p>';
+      }
       return;
     }
   }
 
   const prompt = document.getElementById('uploadPrompt');
   const resultDiv = document.getElementById('uploadResult');
-  const messages = currentAgent.messages || {};
-  prompt.style.display = 'none';
-  resultDiv.style.display = 'block';
-  resultDiv.innerHTML = `<div class="message-thinking">${messages.loading || 'Processing'}<span class="thinking-dots"></span></div>`;
+  const agentMessages = currentAgent.messages || {};
 
-  const uploadBtn = document.getElementById('uploadBtn');
+  if (prompt) {
+    prompt.style.display = 'none';
+  }
+  if (resultDiv) {
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = `<div class="message-thinking">${agentMessages.loading || 'Processing'}<span class="thinking-dots"></span></div>`;
+  }
+
+  const uploadBtn = /** @type {HTMLButtonElement|null} */ (document.getElementById('uploadBtn'));
   fileInput.disabled = true;
-  uploadBtn.disabled = true;
+  if (uploadBtn) {
+    uploadBtn.disabled = true;
+  }
 
   try {
     const formData = new FormData();
@@ -167,22 +240,34 @@ async function submitUpload() {
       html = '<p>No response received.</p>';
     }
 
-    resultDiv.innerHTML = html;
+    if (resultDiv) {
+      resultDiv.innerHTML = html;
+    }
 
   } catch (error) {
-    const messages = currentAgent.messages || {};
-    resultDiv.innerHTML = `<p class="upload-error">${messages.error || 'Processing failed. Please try again.'}</p>`;
+    const errorMessages = currentAgent?.messages || {};
+    if (resultDiv) {
+      resultDiv.innerHTML = `<p class="upload-error">${errorMessages.error || 'Processing failed. Please try again.'}</p>`;
+    }
     console.error('Upload error:', error);
   }
 
   fileInput.disabled = false;
-  uploadBtn.disabled = false;
+  if (uploadBtn) {
+    uploadBtn.disabled = false;
+  }
   fileInput.value = '';
 }
 
 // ----------------------
 // Chat Mode
 // ----------------------
+
+/**
+ * @param {HTMLElement} container
+ * @param {Session} session
+ * @param {Agent} agent
+ */
 function renderChatMode(container, session, agent) {
   selectedModel = DEFAULT_MODEL;
   selectedEffort = null;
@@ -195,8 +280,8 @@ function renderChatMode(container, session, agent) {
 
   const fileUploadEnabled = agent.features?.fileUpload?.enabled || false;
   const uploadButtonHTML = fileUploadEnabled
-    ? `<input type="file" id="fileInput" accept="${agent.features.fileUpload.acceptedTypes?.join(',') || '*'}" style="display:none;">
-       <button class="btn-attach" id="attachBtn">${agent.features.fileUpload.buttonLabel || '📎'}</button>`
+    ? `<input type="file" id="fileInput" accept="${agent.features?.fileUpload?.acceptedTypes?.join(',') || '*'}" style="display:none;">
+       <button class="btn-attach" id="attachBtn">${agent.features?.fileUpload?.buttonLabel || '📎'}</button>`
     : '';
 
   container.innerHTML = `
@@ -246,60 +331,102 @@ function renderChatMode(container, session, agent) {
   `;
 
   // End chat (navigates to dashboard)
-  document.getElementById('backBtn').addEventListener('click', () => navigate('dashboard'));
+  const backBtn = document.getElementById('backBtn');
+  if (backBtn) {
+    backBtn.addEventListener('click', () => navigate('dashboard'));
+  }
 
   // Sidebar toggle (mobile)
-  document.getElementById('sidebarToggle').addEventListener('click', () => toggleSidebar(true));
-  document.getElementById('sidebarClose').addEventListener('click', () => toggleSidebar(false));
-  document.getElementById('sidebarOverlay').addEventListener('click', () => toggleSidebar(false));
+  const sidebarToggle = document.getElementById('sidebarToggle');
+  const sidebarClose = document.getElementById('sidebarClose');
+  const sidebarOverlay = document.getElementById('sidebarOverlay');
+  if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', () => toggleSidebar(true));
+  }
+  if (sidebarClose) {
+    sidebarClose.addEventListener('click', () => toggleSidebar(false));
+  }
+  if (sidebarOverlay) {
+    sidebarOverlay.addEventListener('click', () => toggleSidebar(false));
+  }
 
   // Model selector
-  document.getElementById('modelSelect').addEventListener('change', (e) => {
-    selectedModel = e.target.value;
-    updateModelControls();
-  });
+  const modelSelect = document.getElementById('modelSelect');
+  if (modelSelect) {
+    modelSelect.addEventListener('change', (e) => {
+      const target = /** @type {HTMLSelectElement} */ (e.target);
+      selectedModel = target.value;
+      updateModelControls();
+    });
+  }
 
   // Effort selector
-  document.getElementById('effortSelect').addEventListener('change', (e) => {
-    selectedEffort = e.target.value;
-  });
+  const effortSelect = document.getElementById('effortSelect');
+  if (effortSelect) {
+    effortSelect.addEventListener('change', (e) => {
+      const target = /** @type {HTMLSelectElement} */ (e.target);
+      selectedEffort = target.value;
+    });
+  }
 
   // Thinking toggle
-  document.getElementById('thinkingToggle').addEventListener('change', (e) => {
-    thinkingEnabled = e.target.checked;
-  });
+  const thinkingToggle = document.getElementById('thinkingToggle');
+  if (thinkingToggle) {
+    thinkingToggle.addEventListener('change', (e) => {
+      const target = /** @type {HTMLInputElement} */ (e.target);
+      thinkingEnabled = target.checked;
+    });
+  }
 
   // Send button
-  document.getElementById('sendBtn').addEventListener('click', sendMessage);
+  const sendBtn = document.getElementById('sendBtn');
+  if (sendBtn) {
+    sendBtn.addEventListener('click', sendMessage);
+  }
 
   // Textarea
   setupTextarea();
 
   // File upload in chat mode
   if (fileUploadEnabled) {
-    document.getElementById('attachBtn').addEventListener('click', () => {
-      document.getElementById('fileInput').click();
-    });
-    document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+    const attachBtn = document.getElementById('attachBtn');
+    const fileInput = document.getElementById('fileInput');
+    if (attachBtn && fileInput) {
+      attachBtn.addEventListener('click', () => {
+        fileInput.click();
+      });
+      fileInput.addEventListener('change', handleFileUpload);
+    }
   }
 
   // Initialize controls for default model
   updateModelControls();
 
-  document.getElementById('messageInput').focus();
+  const messageInput = document.getElementById('messageInput');
+  if (messageInput) {
+    messageInput.focus();
+  }
 }
 
 // ----------------------
 // Sidebar helpers
 // ----------------------
+
+/**
+ * @param {string} str
+ * @returns {string}
+ */
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+/** @returns {void} */
 function updateModelControls() {
   const model = MODELS[selectedModel];
   const effortSection = document.getElementById('effortSection');
-  const effortSelect = document.getElementById('effortSelect');
+  const effortSelect = /** @type {HTMLSelectElement|null} */ (document.getElementById('effortSelect'));
+
+  if (!effortSection || !effortSelect) return;
 
   if (model && model.effortLevels) {
     effortSection.style.display = '';
@@ -322,13 +449,26 @@ function updateModelControls() {
   }
 }
 
+/**
+ * @param {boolean} open
+ * @returns {void}
+ */
 function toggleSidebar(open) {
-  document.getElementById('chatSidebar').classList.toggle('open', open);
-  document.getElementById('sidebarOverlay').classList.toggle('open', open);
+  const sidebar = document.getElementById('chatSidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  if (sidebar) {
+    sidebar.classList.toggle('open', open);
+  }
+  if (overlay) {
+    overlay.classList.toggle('open', open);
+  }
 }
 
+/** @returns {void} */
 function setupTextarea() {
-  const textarea = document.getElementById('messageInput');
+  const textarea = /** @type {HTMLTextAreaElement|null} */ (document.getElementById('messageInput'));
+  if (!textarea) return;
+
   const maxHeight = 200;
 
   textarea.addEventListener('input', () => {
@@ -353,8 +493,13 @@ function setupTextarea() {
 // ----------------------
 // Send message
 // ----------------------
+
+/** @returns {Promise<void>} */
 async function sendMessage() {
-  const textarea = document.getElementById('messageInput');
+  const textarea = /** @type {HTMLTextAreaElement|null} */ (document.getElementById('messageInput'));
+  const sendBtn = /** @type {HTMLButtonElement|null} */ (document.getElementById('sendBtn'));
+  if (!textarea || !currentAgent || !currentSession) return;
+
   const message = textarea.value.trim();
   if (!message) return;
 
@@ -363,14 +508,20 @@ async function sendMessage() {
   textarea.style.height = 'auto';
 
   textarea.disabled = true;
-  document.getElementById('sendBtn').disabled = true;
+  if (sendBtn) {
+    sendBtn.disabled = true;
+  }
 
   const thinkingId = addThinking();
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 45000);
+  const startTime = Date.now();
+
+  console.log(`[${new Date().toISOString()}] Sending to ${currentAgent.id}, model: ${selectedModel}, effort: ${selectedEffort}, thinking: ${thinkingEnabled}`);
 
   try {
+    /** @type {Record<string, string|boolean>} */
     const payload = {
       message: message,
       agentId: currentAgent.id,
@@ -396,6 +547,8 @@ async function sendMessage() {
 
     clearTimeout(timeoutId);
 
+    console.log(`[${new Date().toISOString()}] Response received: ${response.status} (${Date.now() - startTime}ms)`);
+
     removeMessage(thinkingId);
 
     if (!response.ok) {
@@ -408,6 +561,7 @@ async function sendMessage() {
 
     const data = await response.json();
 
+    /** @type {MessageMeta} */
     const meta = {
       display_name: data.display_name || null,
       effort: data.effort || null,
@@ -420,25 +574,39 @@ async function sendMessage() {
   } catch (error) {
     clearTimeout(timeoutId);
     removeMessage(thinkingId);
-    if (error.name === 'AbortError') {
+
+    const elapsed = Date.now() - startTime;
+
+    if (error instanceof Error && error.name === 'AbortError') {
+      console.log(`[${new Date().toISOString()}] Request timed out after ${elapsed}ms`);
       addMessage('system', 'The agent took too long to respond. It may be starting up — please try again in a moment.');
     } else {
+      console.log(`[${new Date().toISOString()}] Request failed after ${elapsed}ms`);
       addMessage('system', 'Unable to reach agent. Please try again.');
     }
     console.error('Chat error:', error);
   }
 
   textarea.disabled = false;
-  document.getElementById('sendBtn').disabled = false;
+  if (sendBtn) {
+    sendBtn.disabled = false;
+  }
   textarea.focus();
 }
 
 // ----------------------
 // File upload in chat mode (unchanged)
 // ----------------------
+
+/**
+ * @param {Event} event
+ * @returns {Promise<void>}
+ */
 async function handleFileUpload(event) {
-  const file = event.target.files[0];
+  const target = /** @type {HTMLInputElement} */ (event.target);
+  const file = target.files?.[0];
   if (!file) return;
+  if (!currentAgent || !currentSession) return;
 
   const uploadConfig = currentAgent.features?.fileUpload;
 
@@ -456,13 +624,13 @@ async function handleFileUpload(event) {
 
   addMessage('user', `📄 Uploaded: ${file.name}`);
 
-  const textarea = document.getElementById('messageInput');
-  const sendBtn = document.getElementById('sendBtn');
-  const attachBtn = document.getElementById('attachBtn');
+  const textarea = /** @type {HTMLTextAreaElement|null} */ (document.getElementById('messageInput'));
+  const sendBtn = /** @type {HTMLButtonElement|null} */ (document.getElementById('sendBtn'));
+  const attachBtn = /** @type {HTMLButtonElement|null} */ (document.getElementById('attachBtn'));
 
-  textarea.disabled = true;
-  sendBtn.disabled = true;
-  attachBtn.disabled = true;
+  if (textarea) textarea.disabled = true;
+  if (sendBtn) sendBtn.disabled = true;
+  if (attachBtn) attachBtn.disabled = true;
 
   const thinkingId = addThinking();
 
@@ -499,18 +667,27 @@ async function handleFileUpload(event) {
     console.error('Upload error:', error);
   }
 
-  textarea.disabled = false;
-  sendBtn.disabled = false;
-  attachBtn.disabled = false;
+  if (textarea) textarea.disabled = false;
+  if (sendBtn) sendBtn.disabled = false;
+  if (attachBtn) attachBtn.disabled = false;
 
-  event.target.value = '';
+  target.value = '';
 }
 
 // ----------------------
 // Message helpers
 // ----------------------
+
+/**
+ * @param {string} role
+ * @param {string} text
+ * @param {MessageMeta|null} [meta]
+ * @returns {string}
+ */
 function addMessage(role, text, meta = null) {
   const messages = document.getElementById('chatMessages');
+  if (!messages) return '';
+
   const div = document.createElement('div');
   const id = `msg-${Date.now()}-${Math.random().toString(36).slice(2)}`;
   div.id = id;
@@ -522,6 +699,7 @@ function addMessage(role, text, meta = null) {
     if (meta) {
       const metaDiv = document.createElement('div');
       metaDiv.className = 'message-meta';
+      /** @type {string[]} */
       const parts = [];
       if (meta.display_name) parts.push(meta.display_name);
       if (meta.effort) parts.push(capitalize(meta.effort));
@@ -541,8 +719,11 @@ function addMessage(role, text, meta = null) {
   return id;
 }
 
+/** @returns {string} */
 function addThinking() {
   const messages = document.getElementById('chatMessages');
+  if (!messages) return '';
+
   const div = document.createElement('div');
   const id = `msg-thinking-${Date.now()}`;
   div.id = id;
@@ -553,6 +734,10 @@ function addThinking() {
   return id;
 }
 
+/**
+ * @param {string} id
+ * @returns {void}
+ */
 function removeMessage(id) {
   const msg = document.getElementById(id);
   if (msg) msg.remove();
