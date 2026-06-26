@@ -367,6 +367,9 @@ async function sendMessage() {
 
   const thinkingId = addThinking();
 
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 45000);
+
   try {
     const payload = {
       message: message,
@@ -387,8 +390,11 @@ async function sendMessage() {
         'Authorization': `Bearer ${currentSession.token}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      signal: controller.signal
     });
+
+    clearTimeout(timeoutId);
 
     removeMessage(thinkingId);
 
@@ -412,8 +418,13 @@ async function sendMessage() {
     addMessage('agent', data.response, meta);
 
   } catch (error) {
+    clearTimeout(timeoutId);
     removeMessage(thinkingId);
-    addMessage('system', 'Unable to reach agent. Please try again.');
+    if (error.name === 'AbortError') {
+      addMessage('system', 'The agent took too long to respond. It may be starting up — please try again in a moment.');
+    } else {
+      addMessage('system', 'Unable to reach agent. Please try again.');
+    }
     console.error('Chat error:', error);
   }
 
