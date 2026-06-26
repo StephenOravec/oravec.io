@@ -4,6 +4,10 @@ import { navigate, setSession } from './app.js';
 /** @type {{ requestCode: () => void } | undefined} */
 let client;
 
+/**
+ * @param {HTMLElement} container
+ * @returns {void}
+ */
 export function renderLogin(container) {
   container.innerHTML = `
     <div class="login-view">
@@ -15,15 +19,19 @@ export function renderLogin(container) {
     </div>
   `;
 
-  document.getElementById('loginButton').addEventListener('click', () => {
-    if (client) {
-      client.requestCode();
-    }
-  });
+  const loginButton = document.getElementById('loginButton');
+  if (loginButton) {
+    loginButton.addEventListener('click', () => {
+      if (client) {
+        client.requestCode();
+      }
+    });
+  }
 
   initLogin();
 }
 
+/** @returns {void} */
 export function initLogin() {
   if (window.google?.accounts?.oauth2) {
     client = google.accounts.oauth2.initCodeClient({
@@ -48,15 +56,21 @@ export function initLogin() {
   document.head.appendChild(script);
 }
 
+/**
+ * @param {{ code?: string }} response
+ * @returns {Promise<void>}
+ */
 async function handleAuthResponse(response) {
   if (!response.code) return;
 
-  // Show verifying state
   const loginBtn = document.getElementById('loginButton');
   const status = document.createElement('p');
   status.className = 'login-status';
   status.textContent = 'Verifying...';
-  loginBtn.after(status);
+
+  if (loginBtn) {
+    loginBtn.after(status);
+  }
 
   try {
     const result = await fetch(`${CONFIG.PROXY_URL}/auth/login`, {
@@ -66,7 +80,9 @@ async function handleAuthResponse(response) {
     });
 
     if (!result.ok) {
-      loginBtn.classList.add('btn-login-disabled');
+      if (loginBtn) {
+        loginBtn.classList.add('btn-login-disabled');
+      }
       status.className = 'login-error';
       status.textContent = 'Unauthorized';
       return;
@@ -77,7 +93,9 @@ async function handleAuthResponse(response) {
     navigate('dashboard');
 
   } catch (error) {
-    loginBtn.classList.add('btn-login-disabled');
+    if (loginBtn) {
+      loginBtn.classList.add('btn-login-disabled');
+    }
     status.className = 'login-error';
     status.textContent = 'Unauthorized';
     console.error('Login error:', error);
