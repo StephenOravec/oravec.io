@@ -49,14 +49,36 @@ const DEFAULT_MODEL = "claude-haiku-4-5-20251001";
 // ----------------------
 
 /**
+ * @typedef {Object} FileUploadConfig
+ * @property {boolean} [enabled]
+ * @property {string[]} [acceptedTypes]
+ * @property {string} [buttonLabel]
+ * @property {string} [endpoint]
+ * @property {string} [reportLabel]
+ */
+
+/**
+ * @typedef {Object} AgentFeatures
+ * @property {FileUploadConfig} [fileUpload]
+ */
+
+/**
+ * @typedef {Object} AgentMessages
+ * @property {string} [coldStart]
+ * @property {string} [error]
+ * @property {string} [loading]
+ * @property {string} [noProxy]
+ */
+
+/**
  * @typedef {Object} Agent
  * @property {string} id
  * @property {string} name
  * @property {string} [icon]
  * @property {string} [description]
  * @property {string} [mode]
- * @property {Object} [features]
- * @property {Object} [messages]
+ * @property {AgentFeatures} [features]
+ * @property {AgentMessages} [messages]
  */
 
 /**
