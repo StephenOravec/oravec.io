@@ -2,47 +2,21 @@ import { CONFIG } from './config.js';
 import { navigate } from './app.js';
 
 // ----------------------
-// Model config (mirrors bot's MODELS dict — moves to config later)
+// Model config
 // ----------------------
 
 /**
  * @typedef {Object} ModelConfig
- * @property {string} displayName
- * @property {string[]|null} effortLevels
- * @property {string} thinkingType
+ * @property {string} display_name
+ * @property {string[]|null} effort_levels
+ * @property {string} thinking_type
  */
 
 /** @type {Record<string, ModelConfig>} */
-const MODELS = {
-  "claude-haiku-4-5-20251001": {
-    displayName: "Haiku 4.5",
-    effortLevels: null,
-    thinkingType: "extended",
-  },
-  "claude-sonnet-4-6": {
-    displayName: "Sonnet 4.6",
-    effortLevels: ["low", "medium", "high", "max"],
-    thinkingType: "adaptive",
-  },
-  "claude-opus-4-6": {
-    displayName: "Opus 4.6",
-    effortLevels: ["low", "medium", "high", "max"],
-    thinkingType: "adaptive",
-  },
-  "claude-opus-4-7": {
-    displayName: "Opus 4.7",
-    effortLevels: ["low", "medium", "high", "xhigh", "max"],
-    thinkingType: "adaptive",
-  },
-  "claude-opus-4-8": {
-    displayName: "Opus 4.8",
-    effortLevels: ["low", "medium", "high", "xhigh", "max"],
-    thinkingType: "adaptive",
-  },
-};
+let models = {};
 
 /** @type {string} */
-const DEFAULT_MODEL = "claude-haiku-4-5-20251001";
+let defaultModel = '';
 
 // ----------------------
 // State
@@ -101,7 +75,7 @@ let currentAgent = null;
 let currentSession = null;
 
 /** @type {string} */
-let selectedModel = DEFAULT_MODEL;
+let selectedModel = '';
 
 /** @type {string|null} */
 let selectedEffort = null;
@@ -118,7 +92,7 @@ let thinkingEnabled = false;
  * @param {Session} session
  * @param {Agent} agent
  */
-export function renderChat(container, session, agent) {
+export async function renderChat(container, session, agent) {
   currentAgent = agent;
   currentSession = session;
 
@@ -126,13 +100,41 @@ export function renderChat(container, session, agent) {
 
   if (mode === 'upload') {
     renderUploadMode(container, agent);
-  } else {
-    renderChatMode(container, session, agent);
+    return;
   }
+
+  try {
+    const response = await fetch(`${CONFIG.PROXY_URL}/api/models?agentId=${agent.id}`, {
+      headers: {
+        'Authorization': `Bearer ${session.token}`
+      }
+    });
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        navigate('login');
+        return;
+      }
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+    models = data.models;
+    defaultModel = data.default;
+    selectedModel = defaultModel;
+
+  } catch (error) {
+    console.error('Failed to load models:', error);
+    models = {};
+    defaultModel = '';
+    selectedModel = '';
+  }
+
+  renderChatMode(container, session, agent);
 }
 
 // ----------------------
-// Upload Mode (unchanged)
+// Upload Mode
 // ----------------------
 
 /**
@@ -291,13 +293,13 @@ async function submitUpload() {
  * @param {Agent} agent
  */
 function renderChatMode(container, session, agent) {
-  selectedModel = DEFAULT_MODEL;
+  selectedModel = defaultModel;
   selectedEffort = null;
   thinkingEnabled = false;
 
-  const modelOptions = Object.entries(MODELS)
+  const modelOptions = Object.entries(models)
     .map(([id, config]) =>
-      `<option value="${id}"${id === selectedModel ? ' selected' : ''}>${config.displayName}</option>`
+      `<option value="${id}"${id === selectedModel ? ' selected' : ''}>${config.display_name}</option>`
     ).join('');
 
   const fileUploadEnabled = agent.features?.fileUpload?.enabled || false;
@@ -444,21 +446,21 @@ function capitalize(str) {
 
 /** @returns {void} */
 function updateModelControls() {
-  const model = MODELS[selectedModel];
+  const model = models[selectedModel];
   const effortSection = document.getElementById('effortSection');
   const effortSelect = /** @type {HTMLSelectElement|null} */ (document.getElementById('effortSelect'));
 
   if (!effortSection || !effortSelect) return;
 
-  if (model && model.effortLevels) {
+  if (model && model.effort_levels) {
     effortSection.style.display = '';
     const previousEffort = selectedEffort;
 
-    effortSelect.innerHTML = model.effortLevels
+    effortSelect.innerHTML = model.effort_levels
       .map(level => `<option value="${level}">${capitalize(level)}</option>`)
       .join('');
 
-    if (previousEffort && model.effortLevels.includes(previousEffort)) {
+    if (previousEffort && model.effort_levels.includes(previousEffort)) {
       effortSelect.value = previousEffort;
       selectedEffort = previousEffort;
     } else {
@@ -617,7 +619,7 @@ async function sendMessage() {
 }
 
 // ----------------------
-// File upload in chat mode (unchanged)
+// File upload in chat mode
 // ----------------------
 
 /**
