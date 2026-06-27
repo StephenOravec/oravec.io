@@ -1,43 +1,8 @@
 import { CONFIG } from './config.js';
 import { navigate } from './app.js';
 
-/**
- * @typedef {Object} Session
- * @property {string} token
- */
-
-/**
- * @typedef {Object} FileUploadConfig
- * @property {boolean} [enabled]
- * @property {string[]} [acceptedTypes]
- * @property {string} [buttonLabel]
- * @property {string} [endpoint]
- * @property {string} [reportLabel]
- */
-
-/**
- * @typedef {Object} AgentFeatures
- * @property {FileUploadConfig} [fileUpload]
- */
-
-/**
- * @typedef {Object} AgentMessages
- * @property {string} [coldStart]
- * @property {string} [error]
- * @property {string} [loading]
- * @property {string} [noProxy]
- */
-
-/**
- * @typedef {Object} Agent
- * @property {string} id
- * @property {string} name
- * @property {string} [icon]
- * @property {string} [description]
- * @property {string} [mode]
- * @property {AgentFeatures} [features]
- * @property {AgentMessages} [messages]
- */
+/** @typedef {import('./types.js').Session} Session */
+/** @typedef {import('./types.js').Agent} Agent */
 
 /**
  * @param {HTMLElement} container
