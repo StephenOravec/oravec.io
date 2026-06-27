@@ -3,43 +3,9 @@ import { renderLogin } from './login.js';
 import { renderDashboard } from './dashboard.js';
 import { renderChat } from './chat.js';
 
-/**
- * @typedef {Object} Session
- * @property {string} token
- */
+/** @typedef {import('./types.js').Session} Session */
+/** @typedef {import('./types.js').Agent} Agent */
 
-/**
- * @typedef {Object} FileUploadConfig
- * @property {boolean} [enabled]
- * @property {string[]} [acceptedTypes]
- * @property {string} [buttonLabel]
- * @property {string} [endpoint]
- * @property {string} [reportLabel]
- */
-
-/**
- * @typedef {Object} AgentFeatures
- * @property {FileUploadConfig} [fileUpload]
- */
-
-/**
- * @typedef {Object} AgentMessages
- * @property {string} [coldStart]
- * @property {string} [error]
- * @property {string} [loading]
- * @property {string} [noProxy]
- */
-
-/**
- * @typedef {Object} Agent
- * @property {string} id
- * @property {string} name
- * @property {string} [icon]
- * @property {string} [description]
- * @property {string} [mode]
- * @property {AgentFeatures} [features]
- * @property {AgentMessages} [messages]
- */
 
 const app = /** @type {HTMLElement} */ (document.getElementById('app'));
 if (!app) {

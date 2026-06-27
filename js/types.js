@@ -50,3 +50,4 @@
  * @property {boolean} thinking
  * @property {boolean} fallback
  */
+export {};
