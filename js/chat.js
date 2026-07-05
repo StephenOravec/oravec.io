@@ -282,6 +282,8 @@ function renderChatMode(container, session, agent) {
           </label>
         </div>
 
+        <div class="sidebar-section sidebar-history-note" id="historyNote"></div>
+
         <button class="btn-end-chat" id="backBtn">End Chat</button>
       </aside>
 
@@ -374,9 +376,72 @@ function renderChatMode(container, session, agent) {
   // Initialize controls for default model
   updateModelControls();
 
+  // Load conversation history
+  loadHistory();
+
   const messageInput = document.getElementById('messageInput');
   if (messageInput) {
     messageInput.focus();
+  }
+}
+
+// ----------------------
+// History loading
+// ----------------------
+
+/** @returns {Promise<void>} */
+async function loadHistory() {
+  if (!currentAgent || !currentSession) return;
+
+  try {
+    const response = await fetch(
+      `${CONFIG.PROXY_URL}/api/history?agentId=${currentAgent.id}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${currentSession.token}`
+        }
+      }
+    );
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        navigate('login');
+        return;
+      }
+      console.error('Failed to load history:', response.status);
+      return;
+    }
+
+    const data = await response.json();
+    const messages = data.messages;
+
+    if (!messages || messages.length === 0) return;
+
+    const firstSeq = messages[0].seq;
+    const lastSeq = messages[messages.length - 1].seq;
+
+    for (const msg of messages) {
+      if (msg.role === 'assistant') {
+        /** @type {MessageMeta|null} */
+        const meta = msg.metadata ? {
+          display_name: msg.metadata.display_name || null,
+          effort: msg.metadata.effort || null,
+          thinking: msg.metadata.thinking || false,
+          fallback: msg.metadata.fallback || false,
+        } : null;
+        addMessage('agent', msg.content, meta, msg.seq);
+      } else {
+        addMessage('user', msg.content, null, msg.seq);
+      }
+    }
+
+    const historyNote = document.getElementById('historyNote');
+    if (historyNote) {
+      historyNote.textContent = `Messages ${firstSeq}–${lastSeq} loaded`;
+    }
+
+  } catch (error) {
+    console.error('History load error:', error);
   }
 }
 
@@ -475,6 +540,7 @@ async function sendMessage() {
   const message = textarea.value.trim();
   if (!message) return;
 
+  // Seq not yet known — will be assigned by backend
   addMessage('user', message);
   textarea.value = '';
   textarea.style.height = 'auto';
@@ -533,6 +599,11 @@ async function sendMessage() {
 
     const data = await response.json();
 
+    // Update the user message with its actual seq
+    const userSeq = data.seq;
+    const assistantSeq = data.seq + 1;
+    updateLastUserSeq(userSeq);
+
     /** @type {MessageMeta} */
     const meta = {
       display_name: data.display_name || null,
@@ -541,7 +612,7 @@ async function sendMessage() {
       fallback: data.fallback || false,
     };
 
-    addMessage('agent', data.response, meta);
+    addMessage('agent', data.response, meta, assistantSeq);
 
   } catch (error) {
     clearTimeout(timeoutId);
@@ -654,9 +725,10 @@ async function handleFileUpload(event) {
  * @param {string} role
  * @param {string} text
  * @param {MessageMeta|null} [meta]
+ * @param {number|null} [seq]
  * @returns {string}
  */
-function addMessage(role, text, meta = null) {
+function addMessage(role, text, meta = null, seq = null) {
   const messages = document.getElementById('chatMessages');
   if (!messages) return '';
 
@@ -665,8 +737,19 @@ function addMessage(role, text, meta = null) {
   div.id = id;
   div.className = `message message-${role}`;
 
+  // Seq label
+  if (seq !== null) {
+    const seqSpan = document.createElement('span');
+    seqSpan.className = 'message-seq';
+    seqSpan.textContent = `#${seq}`;
+    div.appendChild(seqSpan);
+  }
+
   if (role === 'agent') {
-    div.innerHTML = marked.parse(text);
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
+    contentDiv.innerHTML = marked.parse(text);
+    div.appendChild(contentDiv);
 
     if (meta) {
       const metaDiv = document.createElement('div');
@@ -683,12 +766,37 @@ function addMessage(role, text, meta = null) {
       }
     }
   } else {
-    div.textContent = text;
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
+    contentDiv.textContent = text;
+    div.appendChild(contentDiv);
   }
 
   messages.appendChild(div);
   messages.scrollTop = messages.scrollHeight;
   return id;
+}
+
+/**
+ * Update the last user message's seq after the backend assigns it.
+ * @param {number} seq
+ * @returns {void}
+ */
+function updateLastUserSeq(seq) {
+  const messages = document.getElementById('chatMessages');
+  if (!messages) return;
+
+  const userMessages = messages.querySelectorAll('.message-user');
+  const lastUser = userMessages[userMessages.length - 1];
+  if (!lastUser) return;
+
+  let seqSpan = lastUser.querySelector('.message-seq');
+  if (!seqSpan) {
+    seqSpan = document.createElement('span');
+    seqSpan.className = 'message-seq';
+    lastUser.insertBefore(seqSpan, lastUser.firstChild);
+  }
+  seqSpan.textContent = `#${seq}`;
 }
 
 /** @returns {string} */
