@@ -518,7 +518,7 @@ body {
 }
 
 .message-user .message-seq {
-  text-align: right;
+  text-align: left;
 }
 
 .sidebar-history-note {
