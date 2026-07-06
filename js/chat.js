@@ -31,6 +31,9 @@ let selectedEffort = null;
 /** @type {boolean} */
 let thinkingEnabled = false;
 
+/** @type {number} */
+let nextSeq = 1;
+
 // ----------------------
 // Entry point
 // ----------------------
@@ -440,6 +443,8 @@ async function loadHistory() {
       historyNote.textContent = `Last ${messages.length} messages loaded for reference: sequence ${firstSeq}–${lastSeq}.`;
     }
 
+    nextSeq = lastSeq + 1;
+
   } catch (error) {
     console.error('History load error:', error);
   }
@@ -540,8 +545,8 @@ async function sendMessage() {
   const message = textarea.value.trim();
   if (!message) return;
 
-  // Seq not yet known — will be assigned by backend
-  addMessage('user', message);
+  // Seq number predicted and then finalized by backend when turn saves
+  addMessage('user', message, null, nextSeq);
   textarea.value = '';
   textarea.style.height = 'auto';
 
@@ -599,10 +604,9 @@ async function sendMessage() {
 
     const data = await response.json();
 
-    // Update the user message with its actual seq
-    const userSeq = data.seq;
+    // Assistant sequence set and counter advanced for next turn. 
     const assistantSeq = data.seq + 1;
-    updateLastUserSeq(userSeq);
+    nextSeq = data.seq + 2;
 
     /** @type {MessageMeta} */
     const meta = {
@@ -777,27 +781,6 @@ function addMessage(role, text, meta = null, seq = null) {
   return id;
 }
 
-/**
- * Update the last user message's seq after the backend assigns it.
- * @param {number} seq
- * @returns {void}
- */
-function updateLastUserSeq(seq) {
-  const messages = document.getElementById('chatMessages');
-  if (!messages) return;
-
-  const userMessages = messages.querySelectorAll('.message-user');
-  const lastUser = userMessages[userMessages.length - 1];
-  if (!lastUser) return;
-
-  let seqSpan = lastUser.querySelector('.message-seq');
-  if (!seqSpan) {
-    seqSpan = document.createElement('span');
-    seqSpan.className = 'message-seq';
-    lastUser.insertBefore(seqSpan, lastUser.firstChild);
-  }
-  seqSpan.textContent = `#${seq}`;
-}
 
 /** @returns {string} */
 function addThinking() {
