@@ -437,7 +437,7 @@ async function loadHistory() {
 
     const historyNote = document.getElementById('historyNote');
     if (historyNote) {
-      historyNote.textContent = `Messages ${firstSeq}–${lastSeq} loaded`;
+      historyNote.textContent = `Last ${messages.length} messages (numbers ${firstSeq}–${lastSeq}) loaded for reference.`;
     }
 
   } catch (error) {
