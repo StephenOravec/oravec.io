@@ -513,7 +513,7 @@ body {
 .message-seq {
   display: block;
   font-size: 0.65rem;
-  color: #BFBFBF;
+  color: #bfbfbf;
   margin-bottom: 0.25rem;
 }
 
@@ -523,7 +523,8 @@ body {
 
 .sidebar-history-note {
   font-size: 0.75rem;
-  color: #ffffff;
+  color: #bfbfbf;
+  font-style: italic;
 }
 
 .thinking-dots::after {
@@ -789,6 +790,24 @@ body {
   border: none;
   border-top: 1px solid #2a2a2a;
   margin: 1em 0;
+}
+
+.message-agent a,
+.upload-response a {
+  color: #5b9bd5;
+  text-decoration: underline;
+  text-decoration-color: rgba(91, 155, 213, 0.4);
+}
+
+.message-agent a:visited,
+.upload-response a:visited {
+  color: #9b8ec4;
+}
+
+.message-agent a:hover,
+.upload-response a:hover {
+  color: #7bb3e8;
+  text-decoration-color: rgba(123, 179, 232, 0.7);
 }
 
 @media (min-width: 480px) {

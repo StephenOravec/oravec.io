@@ -25,6 +25,12 @@ interface Window {
 
 declare const google: Google;
 
+declare class MarkedRenderer {
+  link(args: object): string;
+}
+
 declare const marked: {
   parse(text: string): string;
+  setOptions(options: { renderer?: MarkedRenderer }): void;
+  Renderer: { new(): MarkedRenderer };
 };

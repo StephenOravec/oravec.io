@@ -35,6 +35,20 @@ let thinkingEnabled = false;
 let nextSeq = 1;
 
 // ----------------------
+// Marked configuration
+// ----------------------
+
+// Open links in agent messages in new tabs
+const renderer = new marked.Renderer();
+const originalLink = /** @type {(args: object) => string} */ (renderer.link.bind(renderer));
+/** @param {object} args */
+renderer.link = function(args) {
+  const html = originalLink(args);
+  return html.replace('<a ', '<a target="_blank" rel="noopener" ');
+};
+marked.setOptions({ renderer });
+
+// ----------------------
 // Entry point
 // ----------------------
 
