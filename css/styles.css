@@ -523,8 +523,7 @@ body {
 
 .sidebar-history-note {
   font-size: 0.75rem;
-  color: #666;
-  font-style: italic;
+  color: #ffffff;
 }
 
 .thinking-dots::after {
